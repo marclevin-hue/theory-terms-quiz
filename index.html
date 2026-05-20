@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theory Terms Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0d1119;
+      --surface:      #141c2b;
+      --surface2:     #1a2438;
+      --card-front:   #f6f1e7;
+      --card-back:    #162030;
+      --text:         #eee9de;
+      --muted:        #7a8fa8;
+      --accent:       #d4913a;
+      --accent-lt:    #e8b468;
+      --correct:      #4a9068;
+      --correct-lt:   #62b888;
+      --wrong:        #c24a41;
+      --wrong-lt:     #e06559;
+      --border:       rgba(255,255,255,0.07);
+      --shadow:       0 30px 90px rgba(0,0,0,0.55), 0 6px 20px rgba(0,0,0,0.3);
+      --ff-serif:     'Cormorant Garamond', Georgia, serif;
+      --ff-sans:      'DM Sans', system-ui, sans-serif;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 90% 55% at 50% -5%, rgba(212,145,58,0.13) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 95% 95%, rgba(74,144,104,0.07) 0%, transparent 55%);
+      color: var(--text);
+      font-family: var(--ff-sans);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    /* ── SCREENS ── */
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      min-height: 100vh;
+      padding: 48px 20px 64px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .screen.active { display: flex; opacity: 1; }
+
+    /* ── HOME ── */
+    #screen-home {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .home-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      animation: fadeUp 0.55s ease 0.05s both;
+    }
+
+    .home-title {
+      font-family: var(--ff-serif);
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      margin-bottom: 16px;
+      animation: fadeUp 0.55s ease 0.1s both;
+    }
+    .home-title em { font-style: italic; color: var(--accent-lt); }
+
+    .home-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.65;
+      margin-bottom: 32px;
+      animation: fadeUp 0.55s ease 0.15s both;
+    }
+
+    .home-pills {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      animation: fadeUp 0.55s ease 0.2s both;
+    }
+    .pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .pill strong { color: var(--text); font-weight: 500; }
+
+    /* Mode tile grid */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      width: 100%;
+      max-width: 520px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.55s ease 0.25s both;
+    }
+
+    .mode-tile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 22px 24px;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.2s, background 0.2s, transform 0.18s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .mode-tile::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212,145,58,0) 0%, rgba(212,145,58,0.06) 100%);
+      opacity: 0;
+      transition: opacity 0.2s;
+      border-radius: inherit;
+    }
+    .mode-tile:hover {
+      border-color: rgba(212,145,58,0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(0,0,0,0.3);
+    }
+    .mode-tile:hover::before { opacity: 1; }
+    .mode-tile:active { transform: translateY(0); }
+
+    .mode-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      background: rgba(212,145,58,0.12);
+      border: 1px solid rgba(212,145,58,0.2);
+    }
+    .mode-icon svg { width: 18px; height: 18px; }
+
+    .mode-name {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .mode-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    .home-rule {
+      width: 1px;
+      height: 44px;
+      background: var(--border);
+      margin: 0 auto 28px;
+      animation: fadeUp 0.55s ease 0.3s both;
+    }
+
+    .home-footer {
+      font-family: var(--ff-serif);
+      font-size: 0.88rem;
+      font-style: italic;
+      font-weight: 300;
+      color: rgba(122,143,168,0.45);
+      animation: fadeUp 0.55s ease 0.35s both;
+    }
+
+    /* ── SHARED QUIZ HEADER ── */
+    #screen-quiz, #screen-mc {
+      justify-content: flex-start;
+      padding-top: 28px;
+    }
+
+    .quiz-top {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 6px;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .stats-group { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    .stat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .stat.s-correct { color: var(--correct-lt); }
+    .stat.s-correct .stat-dot { background: var(--correct); }
+    .stat.s-wrong { color: var(--wrong-lt); }
+    .stat.s-wrong .stat-dot { background: var(--wrong); }
+    .stat.s-skip { color: var(--muted); }
+    .stat.s-skip .stat-dot { background: #4a5668; }
+
+    .progress-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-lt));
+      border-radius: 2px;
+      transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+      width: 0%;
+    }
+
+    /* ── FLASHCARD ── */
+    .card-scene {
+      width: 100%;
+      max-width: 600px;
+      perspective: 1300px;
+      cursor: pointer;
+      margin-bottom: 26px;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .card-scene:hover .flip-hint { opacity: 0.55; }
+
+    .card {
+      position: relative;
+      width: 100%;
+      padding-top: 62%;
+      transform-style: preserve-3d;
+      transition: transform 0.52s cubic-bezier(0.4,0,0.2,1);
+    }
+    .card.is-flipped { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 44px 48px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-front {
+      background: var(--card-front);
+      color: #1c1408;
+    }
+    .card-front::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,0.55) 0%, transparent 55%);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .card-back {
+      background: var(--card-back);
+      transform: rotateY(180deg);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .card-back::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 25% 60%, rgba(74,144,104,0.12) 0%, transparent 60%);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .face-label {
+      position: absolute;
+      top: 18px;
+      left: 22px;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.35;
+    }
+    .card-front .face-label,
+    .mc-term-card .face-label { color: #1c1408; }
+    .card-back .face-label { color: var(--text); }
+
+    .face-num {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      font-size: 0.68rem;
+      opacity: 0.28;
+    }
+    .card-front .face-num,
+    .mc-term-card .face-num { color: #1c1408; }
+    .card-back .face-num { color: var(--text); }
+
+    .term-text {
+      font-family: var(--ff-serif);
+      font-size: clamp(1.1rem, 3.2vw, 1.85rem);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.4;
+      text-align: center;
+      color: #1c1408;
+      position: relative;
+      z-index: 1;
+      max-width: 90%;
+    }
+
+    .theory-text {
+      font-family: var(--ff-serif);
+      font-size: clamp(1.5rem, 4.5vw, 2.6rem);
+      font-weight: 500;
+      line-height: 1.2;
+      text-align: center;
+      color: var(--accent-lt);
+      position: relative;
+      z-index: 1;
+      max-width: 88%;
+    }
+
+    .flip-hint {
+      position: absolute;
+      bottom: 16px;
+      right: 20px;
+      font-size: 0.68rem;
+      font-style: italic;
+      color: #1c1408;
+      opacity: 0.28;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    /* ── FC ACTION BUTTONS ── */
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .btn {
+      font-family: var(--ff-sans);
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: 9px;
+      padding: 12px 22px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.14s, box-shadow 0.14s, background 0.14s, opacity 0.2s;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-nav {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--muted);
+      min-width: 94px;
+    }
+    .btn-nav:hover { color: var(--text); }
+    .btn-nav:disabled { opacity: 0.28; cursor: not-allowed; transform: none; }
+
+    .btn-correct {
+      background: rgba(74,144,104,0.14);
+      border-color: rgba(74,144,104,0.38);
+      color: var(--correct-lt);
+      min-width: 124px;
+    }
+    .btn-correct:hover { background: rgba(74,144,104,0.24); box-shadow: 0 4px 18px rgba(74,144,104,0.18); }
+
+    .btn-wrong {
+      background: rgba(194,74,65,0.14);
+      border-color: rgba(194,74,65,0.38);
+      color: var(--wrong-lt);
+      min-width: 124px;
+    }
+    .btn-wrong:hover { background: rgba(194,74,65,0.24); box-shadow: 0 4px 18px rgba(194,74,65,0.18); }
+
+    .btn.hidden { opacity: 0; pointer-events: none; transform: scale(0.93); }
+
+    /* ── MC TERM CARD ── */
+    .mc-term-card {
+      width: 100%;
+      max-width: 600px;
+      background: var(--card-front);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 44px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 170px;
+      position: relative;
+      margin-bottom: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border-top: 3px solid var(--accent);
+    }
+    .mc-term-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,0.5) 0%, transparent 55%);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    /* ── MC OPTIONS GRID ── */
+    .mc-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 18px;
+    }
+
+    .opt-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--ff-sans);
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--text);
+      transition: border-color 0.14s, background 0.14s, transform 0.12s, opacity 0.2s;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-height: 62px;
+      line-height: 1.4;
+    }
+    .opt-btn:hover:not(:disabled) {
+      border-color: rgba(212,145,58,0.55);
+      background: rgba(212,145,58,0.07);
+      transform: translateY(-1px);
+    }
+    .opt-btn:active:not(:disabled) { transform: translateY(0); }
+
+    .opt-letter {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-top: 2px;
+      width: 14px;
+      transition: color 0.14s;
+    }
+
+    /* Revealed states */
+    .opt-btn.is-correct {
+      background: rgba(74,144,104,0.18);
+      border-color: var(--correct);
+      color: var(--correct-lt);
+    }
+    .opt-btn.is-correct .opt-letter { color: var(--correct-lt); }
+
+    .opt-btn.is-wrong-pick {
+      background: rgba(194,74,65,0.18);
+      border-color: var(--wrong);
+      color: var(--wrong-lt);
+    }
+    .opt-btn.is-wrong-pick .opt-letter { color: var(--wrong-lt); }
+
+    .opt-btn.is-dim {
+      opacity: 0.32;
+    }
+
+    .opt-btn:disabled { cursor: default; transform: none !important; }
+
+    /* ── COMPLETE ── */
+    #screen-complete {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .complete-wrap {
+      max-width: 460px;
+      width: 100%;
+      animation: fadeUp 0.55s ease 0.05s both;
+    }
+
+    .complete-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .complete-mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .complete-mode-badge svg { width: 12px; height: 12px; opacity: 0.7; }
+
+    .complete-title {
+      font-family: var(--ff-serif);
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 38px;
+    }
+
+    .ring-wrap { display: flex; justify-content: center; margin-bottom: 34px; }
+    .ring-svg { transform: rotate(-90deg); }
+    .ring-track { fill: none; stroke: var(--surface2); stroke-width: 9; }
+    .ring-arc {
+      fill: none;
+      stroke: var(--correct);
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-dasharray: 427.3;
+      stroke-dashoffset: 427.3;
+      transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1) 0.2s;
+    }
+    .ring-container { position: relative; width: 160px; height: 160px; }
+    .ring-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .ring-pct { font-family: var(--ff-serif); font-size: 2.5rem; font-weight: 500; line-height: 1; }
+    .ring-pct-lbl { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 5px; }
+
+    .breakdown {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .bd-item {
+      flex: 1;
+      padding: 20px 12px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+    }
+    .bd-item:last-child { border-right: none; }
+    .bd-num { font-family: var(--ff-serif); font-size: 2.2rem; font-weight: 500; line-height: 1; margin-bottom: 5px; }
+    .bd-lbl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .bd-item.c-correct .bd-num { color: var(--correct-lt); }
+    .bd-item.c-wrong .bd-num { color: var(--wrong-lt); }
+    .bd-item.c-skip .bd-num { color: var(--muted); }
+
+    .tally-line {
+      font-family: var(--ff-serif);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+    .tally-line strong { color: var(--text); font-style: normal; }
+
+    .complete-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .btn-again {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--ff-sans);
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .btn-again:hover { background: rgba(255,255,255,0.05); transform: translateY(-1px); }
+
+    .btn-again-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-lt) 100%);
+      border-color: transparent;
+      color: #1c0e00;
+      font-weight: 600;
+    }
+    .btn-again-primary:hover { box-shadow: 0 6px 22px rgba(212,145,58,0.3); }
+
+    .complete-footer {
+      font-family: var(--ff-serif);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: rgba(122,143,168,0.4);
+      margin-top: 22px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── QUIZ NAV BAR ── */
+    .quiz-nav {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .quiz-nav-home {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--ff-sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 4px 0;
+      transition: color 0.15s;
+    }
+    .quiz-nav-home:hover { color: var(--text); }
+    .quiz-nav-home svg { width: 14px; height: 14px; }
+
+    .quiz-nav-mode {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.55;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 540px) {
+      .mode-grid { grid-template-columns: 1fr; }
+      .mc-options { grid-template-columns: 1fr; }
+      .card-face, .mc-term-card { padding: 32px 24px; }
+      .complete-btns { grid-template-columns: 1fr; }
+      .btn { padding: 11px 16px; font-size: 0.83rem; min-width: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ════════════ HOME ════════════ -->
+  <section id="screen-home" class="screen active">
+    <p class="home-eyebrow">MFT Theory Review</p>
+    <h1 class="home-title"><em>Theory</em> Terms Quiz</h1>
+    <p class="home-sub">81 terms across 10 therapeutic modalities.<br>Choose your study mode below.</p>
+
+    <div class="home-pills">
+      <div class="pill"><strong>81</strong> terms</div>
+      <div class="pill"><strong id="home-count">—</strong> total completions</div>
+    </div>
+
+    <div class="mode-grid">
+      <div class="mode-tile" onclick="startFC()">
+        <div class="mode-icon">
+          <svg viewBox="0 0 18 18" fill="none" stroke="var(--accent-lt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="16" height="12" rx="2"/>
+            <line x1="1" y1="7" x2="17" y2="7"/>
+          </svg>
+        </div>
+        <div class="mode-name">Flash Cards</div>
+        <div class="mode-desc">Flip to reveal the theory, then grade yourself</div>
+      </div>
+      <div class="mode-tile" onclick="startMC()">
+        <div class="mode-icon">
+          <svg viewBox="0 0 18 18" fill="none" stroke="var(--accent-lt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="4.5" cy="5" r="1.2" fill="var(--accent-lt)" stroke="none"/>
+            <line x1="7.5" y1="5" x2="17" y2="5"/>
+            <circle cx="4.5" cy="9" r="1.2" fill="var(--accent-lt)" stroke="none"/>
+            <line x1="7.5" y1="9" x2="17" y2="9"/>
+            <circle cx="4.5" cy="13" r="1.2" fill="var(--accent-lt)" stroke="none"/>
+            <line x1="7.5" y1="13" x2="17" y2="13"/>
+          </svg>
+        </div>
+        <div class="mode-name">Multiple Choice</div>
+        <div class="mode-desc">Pick the correct theory from four options</div>
+      </div>
+    </div>
+
+    <div class="home-rule"></div>
+    <p class="home-footer">built with love by Marc Levin, (future) AMFT 2026</p>
+  </section>
+
+  <!-- ════════════ FLASH CARDS ════════════ -->
+  <section id="screen-quiz" class="screen">
+    <nav class="quiz-nav">
+      <button class="quiz-nav-home" onclick="goHome()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 7l6-6 6 6"/><path d="M2.5 5.5V13h3.5V9h2v4h3.5V5.5"/>
+        </svg>
+        Home
+      </button>
+      <span class="quiz-nav-mode">Flash Cards</span>
+    </nav>
+    <div class="quiz-top">
+      <div class="stats-row">
+        <div class="stats-group">
+          <div class="stat s-correct"><div class="stat-dot"></div><span id="fc-cnt-right">0</span>&nbsp;correct</div>
+          <div class="stat s-wrong"><div class="stat-dot"></div><span id="fc-cnt-wrong">0</span>&nbsp;wrong</div>
+          <div class="stat s-skip"><div class="stat-dot"></div><span id="fc-cnt-skip">0</span>&nbsp;skipped</div>
+        </div>
+        <div class="progress-label"><span id="fc-prog-num">1</span> / <span id="fc-prog-total">81</span></div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="fc-prog-fill"></div></div>
+    </div>
+
+    <div class="card-scene" onclick="fcFlip()">
+      <div class="card" id="fc-card">
+        <div class="card-face card-front">
+          <span class="face-label">Term</span>
+          <span class="face-num" id="fc-face-num">1 / 81</span>
+          <p class="term-text" id="fc-term"></p>
+          <span class="flip-hint">tap to reveal →</span>
+        </div>
+        <div class="card-face card-back">
+          <span class="face-label">Theory</span>
+          <p class="theory-text" id="fc-theory"></p>
+          <span class="flip-hint" style="color:var(--text);">← tap to flip back</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-nav"             id="fc-btn-back"    onclick="fcBack()">← Back</button>
+      <button class="btn btn-wrong  hidden"   id="fc-btn-wrong"   onclick="fcScore('wrong')">✗ Wrong</button>
+      <button class="btn btn-correct hidden"  id="fc-btn-correct" onclick="fcScore('right')">✓ Right</button>
+      <button class="btn btn-nav"             id="fc-btn-next"    onclick="fcNext()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ════════════ MULTIPLE CHOICE ════════════ -->
+  <section id="screen-mc" class="screen">
+    <nav class="quiz-nav">
+      <button class="quiz-nav-home" onclick="goHome()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 7l6-6 6 6"/><path d="M2.5 5.5V13h3.5V9h2v4h3.5V5.5"/>
+        </svg>
+        Home
+      </button>
+      <span class="quiz-nav-mode">Multiple Choice</span>
+    </nav>
+    <div class="quiz-top">
+      <div class="stats-row">
+        <div class="stats-group">
+          <div class="stat s-correct"><div class="stat-dot"></div><span id="mc-cnt-right">0</span>&nbsp;correct</div>
+          <div class="stat s-wrong"><div class="stat-dot"></div><span id="mc-cnt-wrong">0</span>&nbsp;wrong</div>
+          <div class="stat s-skip"><div class="stat-dot"></div><span id="mc-cnt-skip">0</span>&nbsp;skipped</div>
+        </div>
+        <div class="progress-label"><span id="mc-prog-num">1</span> / <span id="mc-prog-total">81</span></div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="mc-prog-fill"></div></div>
+    </div>
+
+    <div class="mc-term-card">
+      <span class="face-label">Term</span>
+      <span class="face-num" id="mc-face-num">1 / 81</span>
+      <p class="term-text" id="mc-term"></p>
+    </div>
+
+    <div class="mc-options" id="mc-options"></div>
+
+    <div class="actions">
+      <button class="btn btn-nav" id="mc-btn-back" onclick="mcBack()">← Back</button>
+      <button class="btn btn-nav" id="mc-btn-next" onclick="mcNext()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ════════════ COMPLETE ════════════ -->
+  <section id="screen-complete" class="screen">
+    <div class="complete-wrap">
+      <p class="complete-label">Session Complete</p>
+      <div class="complete-mode-badge" id="complete-mode-badge">
+        <!-- set by JS -->
+      </div>
+      <h2 class="complete-title">Well done,<br>keep studying.</h2>
+
+      <div class="ring-wrap">
+        <div class="ring-container">
+          <svg class="ring-svg" width="160" height="160" viewBox="0 0 160 160">
+            <circle class="ring-track" cx="80" cy="80" r="68"/>
+            <circle class="ring-arc"   cx="80" cy="80" r="68" id="ring-arc"/>
+          </svg>
+          <div class="ring-inner">
+            <span class="ring-pct" id="ring-pct">0%</span>
+            <span class="ring-pct-lbl">correct</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="breakdown">
+        <div class="bd-item c-correct"><div class="bd-num" id="fin-right">0</div><div class="bd-lbl">Correct</div></div>
+        <div class="bd-item c-wrong"><div class="bd-num" id="fin-wrong">0</div><div class="bd-lbl">Wrong</div></div>
+        <div class="bd-item c-skip"><div class="bd-num" id="fin-skip">0</div><div class="bd-lbl">Skipped</div></div>
+      </div>
+
+      <p class="tally-line">🌿 <strong id="fin-total">—</strong> total quiz completions by all users</p>
+
+      <div class="complete-btns">
+        <button class="btn-again" onclick="goHome()">← Choose Mode</button>
+        <button class="btn-again btn-again-primary" id="btn-play-again" onclick="playAgain()">Play Again</button>
+      </div>
+    </div>
+    <p class="complete-footer">built with love by Marc Levin, (future) AMFT 2026</p>
+  </section>
+
+</div>
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const TERMS = [
+  { term: "Accessing client's strengths and resources",                                        theory: "Solution Focused" },
+  { term: "Affirmations / Compliments",                                                        theory: "Solution Focused" },
+  { term: "Anxiety is part of the human condition",                                            theory: "Existential" },
+  { term: "Awareness of here-and-now",                                                         theory: "Gestalt" },
+  { term: "Body awareness",                                                                    theory: "Gestalt" },
+  { term: "Boundary making",                                                                   theory: "Structural" },
+  { term: "Change occurs by learning to modify dysfunctional thought patterns",                theory: "CBT" },
+  { term: "Change occurs through action-oriented directives",                                  theory: "Strategic" },
+  { term: "Choosing to think and act authentically and responsibly",                           theory: "Existential" },
+  { term: "Client confronts anxiety inherent in living",                                       theory: "Existential" },
+  { term: "Congruence / genuineness",                                                          theory: "Client-Centered / Humanistic" },
+  { term: "Coping questions",                                                                  theory: "Solution Focused" },
+  { term: "Deconstruct problem-saturated stories",                                             theory: "Narrative" },
+  { term: "Develop socially useful goals and increase social interest",                        theory: "Adlerian" },
+  { term: "Differentiation",                                                                   theory: "Bowen" },
+  { term: "Early recollection",                                                                theory: "Adlerian" },
+  { term: "Emotional cutoff",                                                                  theory: "Bowen" },
+  { term: "Empathy",                                                                           theory: "Client-Centered / Humanistic" },
+  { term: "Emphasizes finding solutions, not discovering the cause or origins of the problem", theory: "Solution Focused" },
+  { term: "Emphasis on transference and countertransference",                                  theory: "Object Relations / Psychodynamic" },
+  { term: "Empty-chair technique",                                                             theory: "Gestalt" },
+  { term: "Enactment",                                                                         theory: "Structural" },
+  { term: "Enlist a witness",                                                                  theory: "Narrative" },
+  { term: "Establish a holding environment",                                                   theory: "Object Relations / Psychodynamic" },
+  { term: "Everyone has four needs: love/belonging, power/achievement, freedom, and fun/relaxation", theory: "Reality Therapy" },
+  { term: "Everyone must accept the responsibility that comes with freedom",                   theory: "Existential" },
+  { term: "Exception question",                                                                theory: "Solution Focused" },
+  { term: "Exposure",                                                                          theory: "CBT" },
+  { term: "Exploring experience by description",                                               theory: "Gestalt" },
+  { term: "Facilitate detriangulation",                                                        theory: "Bowen" },
+  { term: "Family Constellation",                                                              theory: "Adlerian" },
+  { term: "Family Life Chronology",                                                            theory: "Satir / Communication" },
+  { term: "Family Sculpting",                                                                  theory: "Satir / Communication" },
+  { term: "Finding alternatives",                                                              theory: "CBT" },
+  { term: "Focus on present choices",                                                          theory: "Reality Therapy" },
+  { term: "Honoring the pain",                                                                 theory: "Existential" },
+  { term: "Identify unique outcomes",                                                          theory: "Narrative" },
+  { term: "Identifying and meeting needs",                                                     theory: "Reality Therapy" },
+  { term: "Increase congruent communication",                                                  theory: "Satir / Communication" },
+  { term: "Increase the client's awareness in the present moment",                            theory: "Gestalt" },
+  { term: "Inferiority feelings motivate behavior",                                            theory: "Adlerian" },
+  { term: "Insight oriented",                                                                  theory: "Object Relations / Psychodynamic" },
+  { term: "Labeling distortions",                                                              theory: "CBT" },
+  { term: "Life goals",                                                                        theory: "Adlerian" },
+  { term: "Lifestyle Assessment",                                                              theory: "Adlerian" },
+  { term: "Maladaptive Automatic Thoughts",                                                    theory: "CBT" },
+  { term: "Mimesis",                                                                           theory: "Structural" },
+  { term: "Miracle question",                                                                  theory: "Solution Focused" },
+  { term: "Monitor thoughts and moods",                                                        theory: "CBT" },
+  { term: "Ordeals",                                                                           theory: "Strategic" },
+  { term: "Paradoxical interventions",                                                         theory: "Strategic" },
+  { term: "Philosophical meaning in the face of anxiety",                                      theory: "Existential" },
+  { term: "Prescribing the symptom",                                                           theory: "Strategic" },
+  { term: "Promote insight and growth through interpretation",                                 theory: "Object Relations / Psychodynamic" },
+  { term: "Projective identification",                                                         theory: "Object Relations / Psychodynamic" },
+  { term: "Rearrange how people sit together in the room",                                     theory: "Structural" },
+  { term: "Reduce anxiety and emotional turmoil in the family system",                         theory: "Bowen" },
+  { term: 'Reframing family dynamic as "problem"',                                             theory: "Structural" },
+  { term: "Relaxation techniques",                                                             theory: "CBT" },
+  { term: "Reparative experiences with therapist",                                             theory: "Object Relations / Psychodynamic" },
+  { term: "Restraining",                                                                       theory: "Strategic" },
+  { term: "Restructure the family's organization",                                             theory: "Structural" },
+  { term: "Schema",                                                                            theory: "CBT" },
+  { term: "Scaling questions",                                                                 theory: "Solution Focused" },
+  { term: "Self-acceptance",                                                                   theory: "Client-Centered / Humanistic" },
+  { term: "Self-actualization",                                                                theory: "Client-Centered / Humanistic" },
+  { term: "Separate patient from problem",                                                     theory: "Narrative" },
+  { term: "Systematic Desensitization",                                                        theory: "CBT" },
+  { term: 'Teach "I statements"',                                                              theory: "Satir / Communication" },
+  { term: 'Teach "I statements"',                                                              theory: "Bowen" },
+  { term: "Telling, talking about, and naming emotional pain",                                 theory: "Existential" },
+  { term: "Therapist is directive",                                                            theory: "Strategic" },
+  { term: "Therapist is nondirective",                                                         theory: "Client-Centered / Humanistic" },
+  { term: "Thought Record",                                                                    theory: "CBT" },
+  { term: "Three-column technique",                                                            theory: "CBT" },
+  { term: "Unconditional positive regard",                                                     theory: "Client-Centered / Humanistic" },
+  { term: "Unbalancing",                                                                       theory: "Structural" },
+  { term: "Understand problem's effects",                                                      theory: "Narrative" },
+  { term: "Understanding multigenerational dynamics",                                          theory: "Bowen" },
+  { term: "Uses experiments",                                                                  theory: "Gestalt" },
+  { term: "Write a letter to self and others",                                                 theory: "Narrative" },
+];
+
+const ALL_THEORIES = [...new Set(TERMS.map(t => t.theory))];
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.opacity = '0';
+  });
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = '1'; }));
+}
+
+// ── SHARED STATE ──────────────────────────────────────────────────────────────
+let activeMode = null; // 'fc' | 'mc'
+
+// ═══════════════════════════════════════
+// FLASH CARD MODE
+// ═══════════════════════════════════════
+let fcDeck    = [];
+let fcIndex   = 0;
+let fcFlipped = false;
+let fcScores  = [];
+let fcHistory = [];
+
+function startFC() {
+  activeMode = 'fc';
+  fcDeck    = shuffle(TERMS);
+  fcIndex   = 0;
+  fcFlipped = false;
+  fcScores  = new Array(fcDeck.length).fill(null);
+  fcHistory = [0];
+  document.getElementById('fc-prog-total').textContent = fcDeck.length;
+  showScreen('screen-quiz');
+  fcRenderCard();
+  fcRenderStats();
+}
+
+function fcFlip() {
+  fcFlipped = !fcFlipped;
+  const el = document.getElementById('fc-card');
+  if (fcFlipped) {
+    el.classList.add('is-flipped');
+    document.getElementById('fc-btn-correct').classList.remove('hidden');
+    document.getElementById('fc-btn-wrong').classList.remove('hidden');
+  } else {
+    el.classList.remove('is-flipped');
+    document.getElementById('fc-btn-correct').classList.add('hidden');
+    document.getElementById('fc-btn-wrong').classList.add('hidden');
+  }
+}
+
+function fcScore(result) {
+  fcScores[fcIndex] = result;
+  fcAdvance();
+}
+
+function fcNext() {
+  if (fcScores[fcIndex] === null) fcScores[fcIndex] = 'skip';
+  fcAdvance();
+}
+
+function fcAdvance() {
+  if (fcIndex >= fcDeck.length - 1) { endSession(fcScores); return; }
+  fcIndex++;
+  fcHistory.push(fcIndex);
+  fcFlipped = false;
+  fcRenderCard();
+  fcRenderStats();
+}
+
+function fcBack() {
+  if (fcHistory.length <= 1) return;
+  fcHistory.pop();
+  fcIndex   = fcHistory[fcHistory.length - 1];
+  fcFlipped = true;
+  fcRenderCard();
+  fcRenderStats();
+}
+
+function fcRenderCard() {
+  const card = fcDeck[fcIndex];
+  document.getElementById('fc-term').textContent   = card.term;
+  document.getElementById('fc-theory').textContent = card.theory;
+  document.getElementById('fc-prog-num').textContent  = fcIndex + 1;
+  document.getElementById('fc-face-num').textContent  = `${fcIndex + 1} / ${fcDeck.length}`;
+
+  const el = document.getElementById('fc-card');
+  if (fcFlipped) {
+    el.classList.add('is-flipped');
+    document.getElementById('fc-btn-correct').classList.remove('hidden');
+    document.getElementById('fc-btn-wrong').classList.remove('hidden');
+  } else {
+    el.classList.remove('is-flipped');
+    document.getElementById('fc-btn-correct').classList.add('hidden');
+    document.getElementById('fc-btn-wrong').classList.add('hidden');
+  }
+  document.getElementById('fc-btn-back').disabled = fcHistory.length <= 1;
+  document.getElementById('fc-prog-fill').style.width = (fcIndex / fcDeck.length * 100) + '%';
+}
+
+function fcRenderStats() {
+  document.getElementById('fc-cnt-right').textContent = fcScores.filter(s => s === 'right').length;
+  document.getElementById('fc-cnt-wrong').textContent = fcScores.filter(s => s === 'wrong').length;
+  document.getElementById('fc-cnt-skip').textContent  = fcScores.filter(s => s === 'skip').length;
+}
+
+// ═══════════════════════════════════════
+// MULTIPLE CHOICE MODE
+// ═══════════════════════════════════════
+let mcDeck    = []; // each: { term, theory, options:[4 strings], selected:null|string }
+let mcIndex   = 0;
+let mcScores  = [];
+let mcHistory = [];
+
+function generateMCDeck() {
+  return shuffle(TERMS).map(card => {
+    const wrongs  = shuffle(ALL_THEORIES.filter(t => t !== card.theory)).slice(0, 3);
+    const options = shuffle([card.theory, ...wrongs]);
+    return { term: card.term, theory: card.theory, options, selected: null };
+  });
+}
+
+function startMC() {
+  activeMode = 'mc';
+  mcDeck    = generateMCDeck();
+  mcIndex   = 0;
+  mcScores  = new Array(mcDeck.length).fill(null);
+  mcHistory = [0];
+  document.getElementById('mc-prog-total').textContent = mcDeck.length;
+  showScreen('screen-mc');
+  mcRenderCard();
+  mcRenderStats();
+}
+
+function mcRenderCard() {
+  const card    = mcDeck[mcIndex];
+  const letters = ['A', 'B', 'C', 'D'];
+
+  document.getElementById('mc-term').textContent     = card.term;
+  document.getElementById('mc-prog-num').textContent = mcIndex + 1;
+  document.getElementById('mc-face-num').textContent = `${mcIndex + 1} / ${mcDeck.length}`;
+  document.getElementById('mc-prog-fill').style.width = (mcIndex / mcDeck.length * 100) + '%';
+  document.getElementById('mc-btn-back').disabled = mcHistory.length <= 1;
+
+  const container = document.getElementById('mc-options');
+  container.innerHTML = card.options.map((opt, i) => {
+    let cls = 'opt-btn';
+    let ltr = letters[i];
+    if (card.selected !== null) {
+      if (opt === card.theory)    { cls += ' is-correct';    ltr = '✓'; }
+      else if (opt === card.selected) { cls += ' is-wrong-pick'; ltr = '✗'; }
+      else                            { cls += ' is-dim'; }
+    }
+    const disabled = card.selected !== null ? 'disabled' : '';
+    return `<button class="${cls}" data-idx="${i}" ${disabled}>
+      <span class="opt-letter">${ltr}</span>
+      <span>${opt}</span>
+    </button>`;
+  }).join('');
+
+  if (card.selected === null) {
+    container.querySelectorAll('.opt-btn').forEach(btn => {
+      btn.addEventListener('click', () => mcSelectAnswer(parseInt(btn.dataset.idx)));
+    });
+  }
+}
+
+function mcSelectAnswer(idx) {
+  const card = mcDeck[mcIndex];
+  if (card.selected !== null) return;
+  card.selected   = card.options[idx];
+  mcScores[mcIndex] = card.selected === card.theory ? 'right' : 'wrong';
+  mcRenderCard();
+  mcRenderStats();
+}
+
+function mcNext() {
+  if (mcScores[mcIndex] === null) mcScores[mcIndex] = 'skip';
+  if (mcIndex >= mcDeck.length - 1) { endSession(mcScores); return; }
+  mcIndex++;
+  mcHistory.push(mcIndex);
+  mcRenderCard();
+  mcRenderStats();
+}
+
+function mcBack() {
+  if (mcHistory.length <= 1) return;
+  mcHistory.pop();
+  mcIndex = mcHistory[mcHistory.length - 1];
+  mcRenderCard();
+  mcRenderStats();
+}
+
+function mcRenderStats() {
+  document.getElementById('mc-cnt-right').textContent = mcScores.filter(s => s === 'right').length;
+  document.getElementById('mc-cnt-wrong').textContent = mcScores.filter(s => s === 'wrong').length;
+  document.getElementById('mc-cnt-skip').textContent  = mcScores.filter(s => s === 'skip').length;
+}
+
+// ═══════════════════════════════════════
+// END SESSION (shared)
+// ═══════════════════════════════════════
+async function endSession(scores) {
+  const right    = scores.filter(s => s === 'right').length;
+  const wrong    = scores.filter(s => s === 'wrong').length;
+  const skip     = scores.filter(s => s === 'skip' || s === null).length;
+  const answered = right + wrong;
+  const pct      = answered > 0 ? Math.round((right / answered) * 100) : 0;
+
+  document.getElementById('fin-right').textContent = right;
+  document.getElementById('fin-wrong').textContent = wrong;
+  document.getElementById('fin-skip').textContent  = skip;
+  document.getElementById('ring-pct').textContent  = pct + '%';
+
+  // Mode badge
+  const badge = document.getElementById('complete-mode-badge');
+  if (activeMode === 'fc') {
+    badge.innerHTML = `<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="16" height="12" rx="2"/><line x1="1" y1="7" x2="17" y2="7"/></svg> Flash Cards`;
+  } else {
+    badge.innerHTML = `<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="4.5" cy="5" r="1.2" fill="currentColor" stroke="none"/><line x1="7.5" y1="5" x2="17" y2="5"/><circle cx="4.5" cy="9" r="1.2" fill="currentColor" stroke="none"/><line x1="7.5" y1="9" x2="17" y2="9"/><circle cx="4.5" cy="13" r="1.2" fill="currentColor" stroke="none"/><line x1="7.5" y1="13" x2="17" y2="13"/></svg> Multiple Choice`;
+  }
+
+  // Reset ring before animating
+  const arc = document.getElementById('ring-arc');
+  arc.style.transition = 'none';
+  arc.style.strokeDashoffset = '427.3';
+
+  showScreen('screen-complete');
+
+  setTimeout(() => {
+    arc.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1) 0.2s';
+    arc.style.strokeDashoffset = String(427.3 - (pct / 100) * 427.3);
+  }, 120);
+
+  // Increment global counter
+  try {
+    const res  = await fetch('https://api.counterapi.dev/v1/theorytermsquiz/sessions/up');
+    const data = await res.json();
+    const val  = data.value ?? data.count ?? data.hits ?? '—';
+    document.getElementById('fin-total').textContent = Number(val).toLocaleString();
+  } catch {
+    document.getElementById('fin-total').textContent = '—';
+  }
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function goHome() {
+  showScreen('screen-home');
+  loadHomeCount();
+}
+
+function playAgain() {
+  if (activeMode === 'fc') startFC();
+  else startMC();
+}
+
+// ── LOAD HOME COUNT ───────────────────────────────────────────────────────────
+async function loadHomeCount() {
+  try {
+    const res  = await fetch('https://api.counterapi.dev/v1/theorytermsquiz/sessions');
+    const data = await res.json();
+    const val  = data.value ?? data.count ?? data.hits ?? null;
+    if (val !== null) document.getElementById('home-count').textContent = Number(val).toLocaleString();
+  } catch { /* silent */ }
+}
+
+loadHomeCount();
+</script>
+</body>
+</html>
