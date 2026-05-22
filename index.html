@@ -715,6 +715,220 @@
       opacity: 0.55;
     }
 
+    /* ── LOOKUP SCREEN ── */
+    #screen-lookup {
+      justify-content: flex-start;
+      padding-top: 28px;
+    }
+
+    .lookup-body {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .lookup-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .lookup-input {
+      width: 100%;
+      min-height: 180px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      color: var(--text);
+      font-family: var(--ff-sans);
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.65;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 12px;
+    }
+    .lookup-input:focus { border-color: rgba(212,145,58,0.5); }
+    .lookup-input::placeholder { color: var(--muted); opacity: 0.55; }
+
+    .lookup-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-lt) 100%);
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      color: #1c0e00;
+      font-family: var(--ff-sans);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: box-shadow 0.15s, transform 0.14s;
+      margin-bottom: 28px;
+    }
+    .lookup-btn:hover { box-shadow: 0 6px 22px rgba(212,145,58,0.3); transform: translateY(-1px); }
+    .lookup-btn:active { transform: translateY(0); }
+
+    .lookup-result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 26px;
+      animation: fadeUp 0.4s ease both;
+      margin-bottom: 14px;
+    }
+
+    .lookup-result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .lookup-answer-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lookup-answer-letter {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-lt) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-serif);
+      font-size: 1.9rem;
+      font-weight: 500;
+      color: #1c0e00;
+      flex-shrink: 0;
+    }
+
+    .lookup-answer-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .lookup-answer-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .lookup-answer-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .lookup-cat-badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .conf-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .conf-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .conf-dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .conf-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.2s;
+    }
+    .conf-dot.filled { background: var(--accent); border-color: var(--accent-lt); }
+    .conf-dot.filled.high { background: var(--correct); border-color: var(--correct-lt); }
+    .conf-dot.filled.low  { background: var(--wrong);   border-color: var(--wrong-lt); }
+
+    .conf-score-text {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-left: 8px;
+    }
+
+    .lookup-rationale-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .lookup-rationale-text {
+      font-family: var(--ff-serif);
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    .lookup-warn {
+      background: rgba(194,74,65,0.1);
+      border: 1px solid rgba(194,74,65,0.3);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      color: var(--wrong-lt);
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    .lookup-try-again {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px;
+      color: var(--text);
+      font-family: var(--ff-sans);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.14s;
+    }
+    .lookup-try-again:hover { background: rgba(255,255,255,0.05); transform: translateY(-1px); }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 540px) {
       .mode-grid { grid-template-columns: 1fr; }
@@ -732,7 +946,7 @@
   <section id="screen-home" class="screen active">
     <p class="home-eyebrow">MFT Theory Review</p>
     <h1 class="home-title"><em>Theory</em> Terms Quiz</h1>
-    <p class="home-sub">81 terms across 10 therapeutic modalities.<br>Choose your study mode below.</p>
+    <p class="home-sub">81 terms · 285+ exam questions · 10 therapeutic modalities.<br>Choose your study mode below.</p>
 
     <div class="home-pills">
       <div class="pill"><strong>81</strong> terms</div>
@@ -763,6 +977,18 @@
         </div>
         <div class="mode-name">Multiple Choice</div>
         <div class="mode-desc">Pick the correct theory from four options</div>
+      </div>
+      <div class="mode-tile" onclick="startLookup()" style="grid-column: 1 / -1; display: flex; flex-direction: row; align-items: center; gap: 18px; padding: 22px 26px;">
+        <div class="mode-icon" style="margin-bottom: 0; flex-shrink: 0;">
+          <svg viewBox="0 0 18 18" fill="none" stroke="var(--accent-lt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7.5" cy="7.5" r="5"/>
+            <line x1="11.5" y1="11.5" x2="17" y2="17"/>
+          </svg>
+        </div>
+        <div>
+          <div class="mode-name">Question Lookup</div>
+          <div class="mode-desc">Paste an exam question to find the most likely answer with confidence score</div>
+        </div>
       </div>
     </div>
 
@@ -890,6 +1116,62 @@
       </div>
     </div>
     <p class="complete-footer">built with love by Marc Levin, (future) AMFT 2026</p>
+  </section>
+
+  <!-- ════════════ QUESTION LOOKUP ════════════ -->
+  <section id="screen-lookup" class="screen">
+    <nav class="quiz-nav">
+      <button class="quiz-nav-home" onclick="goHome()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 7l6-6 6 6"/><path d="M2.5 5.5V13h3.5V9h2v4h3.5V5.5"/>
+        </svg>
+        Home
+      </button>
+      <span class="quiz-nav-mode">Question Lookup</span>
+    </nav>
+
+    <div class="lookup-body">
+      <div id="lookup-input-area">
+        <label class="lookup-label" for="lookup-textarea">Paste your question + answer choices</label>
+        <textarea
+          id="lookup-textarea"
+          class="lookup-input"
+          placeholder="Paste the full question text here, including the four answer choices (A, B, C, D)…"></textarea>
+        <button class="lookup-btn" onclick="lookupQuestion()">🔍 Find Answer</button>
+      </div>
+
+      <div id="lookup-result" style="display:none;">
+        <div class="lookup-result-card">
+          <div class="lookup-result-header">
+            <div class="lookup-answer-badge">
+              <div class="lookup-answer-letter" id="result-letter">A</div>
+              <div class="lookup-answer-meta">
+                <span class="lookup-answer-label">Most likely answer</span>
+                <span class="lookup-answer-text" id="result-answer-text">—</span>
+              </div>
+            </div>
+            <span class="lookup-cat-badge" id="result-category">—</span>
+          </div>
+
+          <div class="conf-row">
+            <span class="conf-label">Confidence</span>
+            <div style="display:flex; align-items:center; gap:0;">
+              <div class="conf-dots" id="conf-dots"></div>
+              <span class="conf-score-text" id="conf-score-text"></span>
+            </div>
+          </div>
+
+          <p class="lookup-rationale-label">Rationale</p>
+          <p class="lookup-rationale-text" id="result-rationale">—</p>
+
+          <div id="lookup-warn" class="lookup-warn" style="display:none;">
+            ⚠️ Low confidence — this question may not be in the database. Verify the answer before relying on it.
+          </div>
+        </div>
+
+        <button class="lookup-try-again" onclick="resetLookup()">← Try Another Question</button>
+      </div>
+    </div>
   </section>
 
 </div>
@@ -1256,6 +1538,407 @@ async function loadHomeCount() {
 }
 
 loadHomeCount();
+
+// ═══════════════════════════════════════
+// QUESTION LOOKUP MODULE
+// ═══════════════════════════════════════
+
+const QUESTION_BANK = [
+  // ── Law & Ethics ──────────────────────────────────────────────────────────
+  { q: "An MFT uses techniques not previously covered in training as adjunctive treatment. Client feels treatment is beyond scope.", answer: "C", rationale: "Address the client's concerns about treatment being beyond the MFT's scope of competence.", category: "Law & Ethics" },
+  { q: "An 11-year-old child comes to therapy without parents or guardian present.", answer: "C", rationale: "An MFT cannot treat a minor without parental or guardian consent.", category: "Law & Ethics" },
+  { q: "What should happen to the records of a deceased MFT?", answer: "C", rationale: "Records should be maintained securely and confidentially.", category: "Law & Ethics" },
+  { q: "An MFT waives a client's co-payment as a courtesy. When is this ethical?", answer: "D", rationale: "Waiving co-payments is ethical only if the insurance company is made aware.", category: "Law & Ethics" },
+  { q: "A client proposes bartering goods or services in exchange for therapy. The MFT should:", answer: "C", rationale: "Advise the client about the ethical problems associated with bartering arrangements.", category: "Law & Ethics" },
+  { q: "A mother requests the therapy records of her 13-year-old child. The MFT:", answer: "C", rationale: "May deny access if the MFT has reasonable concern the records would harm the minor.", category: "Law & Ethics" },
+  { q: "Molly, a minor client, shows up alone for a session without her parents.", answer: "C", rationale: "See the minor briefly to explore whether an emergency exists.", category: "Law & Ethics" },
+  { q: "An MFT wants to use video recordings of therapy sessions for a college presentation.", answer: "D", rationale: "Written authorization from all recorded clients is required.", category: "Law & Ethics" },
+  { q: "During couples therapy one partner calls separately and shares a secret. The MFT should:", answer: "A", rationale: "Adhere to the confidentiality policy that was established at the beginning of treatment.", category: "Law & Ethics" },
+  { q: "An MFT uses self-hypnosis with clients but has not received adequate training.", answer: "A", rationale: "Admit the lack of competence to the client and provide a referral.", category: "Law & Ethics" },
+  { q: "A client has not filled a psychiatric prescription. The MFT should:", answer: "B", rationale: "Encourage the client to schedule an appointment with their psychiatrist.", category: "Law & Ethics" },
+  { q: "A 15-year-old transgender client presents for therapy without parental consent.", answer: "D", rationale: "Determine whether it is appropriate to see the minor without parental consent.", category: "Law & Ethics" },
+  { q: "An MFT wants to use session video recordings for a graduate class.", answer: "D", rationale: "Written authorization from all clients is required before using recordings.", category: "Law & Ethics" },
+  { q: "A divorced mother presents for therapy but does not have custody documentation.", answer: "A", rationale: "Ask the mother to bring a copy of the court custody ruling to the next session.", category: "Law & Ethics" },
+  { q: "A client wants the MFT to support their bid for full custody of their children.", answer: "B", rationale: "Consult with a lawyer before taking any action.", category: "Law & Ethics" },
+  { q: "A parent involved in a custody dispute asks the MFT for an opinion about custody.", answer: "D", rationale: "Refuse to provide an opinion regarding the custody dispute.", category: "Law & Ethics" },
+  { q: "An emancipated minor's grandmother is paying for therapy and requests information.", answer: "B", rationale: "Refuse to release information without the emancipated minor's authorization.", category: "Law & Ethics" },
+  { q: "A supervisor agrees to provide therapy to a current supervisee.", answer: "A", rationale: "The supervisor is acting unethically by agreeing to provide therapy to a supervisee.", category: "Law & Ethics" },
+  { q: "When a therapist dies, their records are LEAST likely to be:", answer: "A", rationale: "Given directly to clients is the least likely outcome.", category: "Law & Ethics" },
+  { q: "An 83-year-old client discloses that his disabled adult daughter has disappeared.", answer: "A", rationale: "Report suspected elder or dependent adult abuse.", category: "Law & Ethics" },
+  { q: "A request to release information from conjoint or couples therapy requires:", answer: "C", rationale: "All legally competent parties must sign the release authorization.", category: "Law & Ethics" },
+  { q: "A non-custodial parent requests their child's school-based therapy records.", answer: "C", rationale: "A non-custodial parent cannot be denied access to school records.", category: "Law & Ethics" },
+  { q: "A teenage girl is physically beating her 7-year-old brother.", answer: "B", rationale: "Report the child abuse immediately.", category: "Law & Ethics" },
+  { q: "An MFT presents only research that supports their preferred treatment approach.", answer: "D", rationale: "Presenting only supporting research while ignoring contradictory findings is clearly unethical.", category: "Law & Ethics" },
+  { q: "Mary is hired at a community mental health agency and has never worked with an agoraphobic client.", answer: "B", rationale: "Seek consultation from a more experienced colleague but continue seeing the client.", category: "Law & Ethics" },
+  { q: "An MFT is going on vacation. Two clients leave crisis voicemails.", answer: "C", rationale: "Call both clients and assess their safety before leaving.", category: "Law & Ethics" },
+  { q: "Two emancipated minors, ages 14 and 16, engaged in consensual sexual activity.", answer: "A", rationale: "Does not need to file a report because the activity was consensual between peers.", category: "Law & Ethics" },
+  { q: "Bao's mother calls saying Bao bought a gun and is threatening to harm Mai and Jim.", answer: "B", rationale: "Call the police and warn the potential victims Mai and Jim.", category: "Law & Ethics" },
+  { q: "A client is no longer making therapeutic progress but wants to continue sessions.", answer: "D", rationale: "Explore whether additional goals exist, and set a termination date.", category: "Law & Ethics" },
+  { q: "What is accurate regarding minors and consent to opioid treatment?", answer: "C", rationale: "Minors 16 and older may consent to buprenorphine-based treatment outside a narcotic treatment program.", category: "Law & Ethics" },
+  { q: "A client's insurance has denied a mental health claim. The MFT should:", answer: "C", rationale: "Advocate for the client by communicating directly with the insurance company.", category: "Law & Ethics" },
+  { q: "An MFT may deny a client access to their Protected Health Information when:", answer: "A", rationale: "Disclosure is likely to endanger the life or physical safety of the client or another person.", category: "Law & Ethics" },
+  { q: "Which of the following is NOT a mandated category of elder abuse to report?", answer: "A", rationale: "Emotional abuse does not always fall under the same mandatory reporting requirements.", category: "Law & Ethics" },
+  { q: "During a session, a client makes a credible threat to kill his wife.", answer: "A", rationale: "Warn the potential victim and notify law enforcement.", category: "Law & Ethics" },
+
+  // ── Managing Crisis ────────────────────────────────────────────────────────
+  { q: "A recently terminated client calls in crisis stating they are suicidal. The therapist is about to retire.", answer: "A", rationale: "See the client until the crisis has passed, then refer to another therapist.", category: "Managing Crisis" },
+  { q: "Which of the following clients presents the highest suicide risk?", answer: "C", rationale: "A 62-year-old widower with a terminal illness and access to lethal means presents the highest risk.", category: "Managing Crisis" },
+  { q: "A client's close friend is moving away. This is best described as:", answer: "C", rationale: "A precipitating factor for the current crisis.", category: "Managing Crisis" },
+  { q: "When is the most appropriate time to refer a date-rape victim to a support group?", answer: "C", rationale: "When the acute phase of the trauma has subsided.", category: "Managing Crisis" },
+  { q: "A 36-year-old man's wife recently died. Which intervention is LEAST appropriate?", answer: "B", rationale: "Encouraging him to resume normal activities immediately is least appropriate.", category: "Managing Crisis" },
+  { q: "Rachel, 16, is depressed after a breakup and asks the MFT for tranquilizers. First action:", answer: "D", rationale: "Assess Rachel for suicide risk.", category: "Managing Crisis" },
+  { q: "14-year-old Lilly presents with suicidal intent and a specific plan. The MFT should:", answer: "B", rationale: "Immediately contact Lilly's parents.", category: "Managing Crisis" },
+  { q: "A Bipolar I client discloses to the MFT that he knows how to kill himself.", answer: "C", rationale: "Initiate a 5150 involuntary psychiatric hold.", category: "Managing Crisis" },
+  { q: "An 18-year-old discloses she has been researching over-the-counter pill overdoses online.", answer: "D", rationale: "Evaluate the client directly and thoroughly for suicide risk.", category: "Managing Crisis" },
+  { q: "A client is being abused by her husband but denies the abuse. The MFT should:", answer: "A", rationale: "Focus on building a trusting therapeutic relationship.", category: "Managing Crisis" },
+  { q: "A client leaves a voicemail saying she is done trying. The MFT should:", answer: "C", rationale: "Call the psychiatric emergency response team.", category: "Managing Crisis" },
+  { q: "A client who was raped does not want to press charges. The MFT should:", answer: "C", rationale: "Recommend the client be examined by a physician.", category: "Managing Crisis" },
+  { q: "A man is in crisis after losing his job. The MFT is LEAST concerned about:", answer: "B", rationale: "His personality dynamics are the least immediate concern in a crisis.", category: "Managing Crisis" },
+  { q: "An Asian American client is in crisis. Which intervention is LEAST appropriate?", answer: "D", rationale: "Catharsis is culturally inappropriate and least helpful.", category: "Managing Crisis" },
+  { q: "Women who have been raped most commonly describe their attacker as someone exhibiting:", answer: "C", rationale: "Alcohol or drug use.", category: "Managing Crisis" },
+  { q: "Which combination of factors indicates 17-year-old Liza is at risk for sex trafficking?", answer: "B", rationale: "Being anxious, submissive, avoiding eye contact, and having a history of self-harm.", category: "Managing Crisis" },
+  { q: "A 32-year-old man is being released from inpatient hospitalization. Future violence risk factors include:", answer: "D", rationale: "Low intelligence, alcohol use, and poor impulse control.", category: "Managing Crisis" },
+  { q: "An object relations approach with a single mother who has been physically abused would:", answer: "D", rationale: "Refer the client to a medical doctor for evaluation.", category: "Managing Crisis" },
+  { q: "A client seen for 10 sessions is in crisis when transferring to a new therapist. The MFT should:", answer: "B", rationale: "Schedule an appointment with the client and continue seeing them until the crisis has abated.", category: "Managing Crisis" },
+  { q: "A 20-year-old gay client jokes that he wants to blow up a church. The MFT should:", answer: "C", rationale: "Assess further to determine whether the threat is serious.", category: "Managing Crisis" },
+  { q: "Roberts' seven-stage crisis intervention model includes which of the following?", answer: "A", rationale: "Crisis assessment, establishing rapport, generating alternatives, and developing a follow-up plan.", category: "Managing Crisis" },
+  { q: "A 67-year-old retired postal worker presents with the highest suicide risk when he:", answer: "B", rationale: "Has recently divorced, changed his will, and expresses hopelessness.", category: "Managing Crisis" },
+  { q: "Compared to non-abusive parents, physically abusive parents are more likely to:", answer: "C", rationale: "Find their children's affective and emotional states more irritating.", category: "Managing Crisis" },
+  { q: "Which meets the California legal definition of grave disability?", answer: "D", rationale: "A 37-year-old who refuses to eat due to a delusional belief.", category: "Managing Crisis" },
+  { q: "A client with MDD has quit their job, sold their car, and purchased a gun. The MFT should contact:", answer: "D", rationale: "The psychiatric mobile response team.", category: "Managing Crisis" },
+  { q: "A 14-year-old girl becomes violent during an inpatient session. The MFT should:", answer: "B", rationale: "Leave the room immediately and get help.", category: "Managing Crisis" },
+  { q: "Which is LEAST likely to be a contributing factor to parental physical abuse?", answer: "C", rationale: "Viewing the child as a sibling in a rivalrous relationship is least typical.", category: "Managing Crisis" },
+  { q: "Mike is a diabetic who is drinking two pints of alcohol per day. The MFT should:", answer: "D", rationale: "Insist that Mike immediately seek hospitalization.", category: "Managing Crisis" },
+  { q: "Luanne is experiencing domestic violence and wants to leave her abuser. The MFT should:", answer: "D", rationale: "Create a detailed safety plan and connect Luanne with community agencies.", category: "Managing Crisis" },
+  { q: "15-year-old Jessie is receiving threatening messages online from a co-worker. This is:", answer: "C", rationale: "Cyberstalking.", category: "Managing Crisis" },
+  { q: "Which intervention is LEAST effective when working with a family experiencing domestic violence?", answer: "C", rationale: "Encouraging the family to stay together is least effective.", category: "Managing Crisis" },
+  { q: "A new client with severe MDD is MOST likely to require hospitalization when:", answer: "A", rationale: "The client has suicidal intent, expresses hopelessness, and has access to a firearm.", category: "Managing Crisis" },
+  { q: "Which is NOT a characteristic typically associated with a violent intimate partner?", answer: "A", rationale: "Higher educational or occupational status.", category: "Managing Crisis" },
+  { q: "A recently divorced woman is at low risk for suicide. The most appropriate intervention is:", answer: "D", rationale: "Talk it over, elicit ambivalent feelings, and obtain a safety agreement.", category: "Managing Crisis" },
+  { q: "A client with MDD has become depressed again after starting a new job. The MFT should:", answer: "D", rationale: "Schedule an appointment with a psychiatrist.", category: "Managing Crisis" },
+  { q: "A woman is MOST likely to be physically abused by her partner when:", answer: "A", rationale: "She becomes pregnant.", category: "Managing Crisis" },
+  { q: "During a session, Bo says he is thinking about killing himself. The MFT should first:", answer: "A", rationale: "Find out whether Bo has a specific suicide plan.", category: "Managing Crisis" },
+  { q: "A boy has run away from home and is sleeping in a park. The MFT should:", answer: "C", rationale: "Provide the boy with referrals to local shelters.", category: "Managing Crisis" },
+
+  // ── Treatment ──────────────────────────────────────────────────────────────
+  { q: "A White MFT has been assigned to work with a Black couple.", answer: "C", rationale: "The MFT should address the racial dynamic openly in the therapeutic relationship.", category: "Treatment" },
+  { q: "Ego autonomous functions are best described as:", answer: "C", rationale: "Functions that operate relatively free from conflict.", category: "Treatment" },
+  { q: "A Bowen therapist is working with a family where the 16-year-old is acting out.", answer: "B", rationale: "Focus on the family's triangulation patterns and level of differentiation.", category: "Treatment" },
+  { q: "When working with elderly clients, the most important consideration is:", answer: "A", rationale: "Flexibility with theoretical approaches to meet the client's needs.", category: "Treatment" },
+  { q: "An intern feels inadequate when working with a particularly complex case.", answer: "D", rationale: "The supervisor should explore the meaning of the intern's feelings in supervision.", category: "Treatment" },
+  { q: "A 14-year-old is unusually withdrawn and shows little emotion.", answer: "C", rationale: "Assess the adolescent for depression.", category: "Treatment" },
+  { q: "A couple is actively pursuing a divorce during the course of treatment.", answer: "C", rationale: "Explore both partners' ambivalence about the divorce.", category: "Treatment" },
+  { q: "Which technique would a therapist trained in Rogers' approach MOST likely use?", answer: "B", rationale: "Reflection of feelings.", category: "Treatment" },
+  { q: "The Mr. and Mrs. Stein exception in California law allows:", answer: "B", rationale: "A therapist to testify about one spouse in a legal proceeding without the other's consent.", category: "Treatment" },
+  { q: "During couples therapy, the MFT has been consistently focusing on the wife's perspective.", answer: "A", rationale: "The MFT is becoming triangulated into the couple's system.", category: "Treatment" },
+  { q: "A client with alcohol use disorder has just received a DUI. The MFT should:", answer: "B", rationale: "Address the client's relationship with alcohol directly in treatment.", category: "Treatment" },
+  { q: "In a stepfamily, the strongest attachment bond is typically:", answer: "B", rationale: "Between a biological parent and their own child.", category: "Treatment" },
+  { q: "When working with an enmeshed family, the structural therapist should focus on:", answer: "A", rationale: "Creating and reinforcing clearer boundaries within the family.", category: "Treatment" },
+  { q: "A young woman says she is bored in therapy and has been frequently cancelling sessions.", answer: "C", rationale: "Explore the resistance in terms of what is being avoided therapeutically.", category: "Treatment" },
+  { q: "In client-centered therapy, transference is understood as:", answer: "C", rationale: "A distortion of the real relationship between client and therapist.", category: "Treatment" },
+  { q: "A structural therapist begins working with parents in a family session.", answer: "D", rationale: "Join with the family system before attempting any structural interventions.", category: "Treatment" },
+  { q: "A trauma-informed care approach to treatment emphasizes:", answer: "C", rationale: "Safety, trustworthiness, and empowerment as core principles.", category: "Treatment" },
+  { q: "Marilyn has been physically beaten by her boyfriend and presents for therapy.", answer: "D", rationale: "Assess the level of danger and collaboratively develop a safety plan.", category: "Treatment" },
+  { q: "A psychodynamic therapist working with a client with MDD focuses on:", answer: "D", rationale: "Exploring the unconscious roots and meaning of the depression.", category: "Treatment" },
+  { q: "A 35-year-old client is consistently critical and judgmental of others.", answer: "C", rationale: "Psychodynamically, this may represent projection of self-criticism onto others.", category: "Treatment" },
+  { q: "Josh's disruptive acting-out behavior stops whenever his parents begin arguing.", answer: "D", rationale: "Josh's behavior is functioning to stabilize and distract the family system.", category: "Treatment" },
+  { q: "Rob and Lydia come to couples therapy with significant communication difficulties.", answer: "D", rationale: "Assess the couple's communication patterns in the first session.", category: "Treatment" },
+  { q: "A new client uses a wheelchair. Before the first session the MFT should:", answer: "A", rationale: "Ensure the office and building are physically accessible.", category: "Treatment" },
+  { q: "During a premarital counseling session, the MFT notices the smell of alcohol on a client.", answer: "A", rationale: "Address the alcohol use directly and therapeutically.", category: "Treatment" },
+  { q: "Kenneth has Bipolar I disorder and is asking about his medications.", answer: "C", rationale: "Lithium is the most commonly prescribed medication for Bipolar I.", category: "Treatment" },
+  { q: "A client mentions they took a second job without prior discussion. The MFT should:", answer: "A", rationale: "Explore the therapeutic meaning of the new job.", category: "Treatment" },
+  { q: "Parents present their 6-year-old who has been diagnosed with ADHD.", answer: "D", rationale: "Include psychoeducation and evidence-based behavioral strategies.", category: "Treatment" },
+  { q: "In a Gestalt session, Bill and Jessica are working on relationship patterns.", answer: "A", rationale: "The Gestalt therapist focuses on present-moment awareness and contact.", category: "Treatment" },
+  { q: "A 13-year-old son is unusually quiet during a family therapy session.", answer: "C", rationale: "Gently draw out the son's perspective and invite his participation.", category: "Treatment" },
+  { q: "A client continues to call the MFT between sessions despite setting a clear boundary.", answer: "C", rationale: "Address the boundary issue therapeutically in the next session.", category: "Treatment" },
+  { q: "A cognitive therapist asks a husband to describe his wife. This intervention helps:", answer: "A", rationale: "Identify cognitive distortions and schemas about the partner.", category: "Treatment" },
+  { q: "Jordan, an African American client, appears aloof and guarded in initial sessions.", answer: "A", rationale: "Explore whether the cultural and racial difference is affecting the therapeutic relationship.", category: "Treatment" },
+  { q: "Minuchin would be LEAST likely to:", answer: "A", rationale: "Explore the family's unconscious processes.", category: "Treatment" },
+  { q: "A 16-year-old has failed math. The parents want the therapist to see him individually.", answer: "B", rationale: "Include the parents as part of the treatment process.", category: "Treatment" },
+  { q: "A family brings in twin boys who are both experiencing anxiety symptoms.", answer: "C", rationale: "A family systems approach addressing the family dynamic is most appropriate.", category: "Treatment" },
+  { q: "A woman survived a serious car accident and is experiencing persistent nightmares.", answer: "B", rationale: "EMDR or trauma-focused therapy is most appropriate.", category: "Treatment" },
+  { q: "The evidence-based treatment of choice for OCD is:", answer: "A", rationale: "Exposure and response prevention (ERP).", category: "Treatment" },
+  { q: "A systems therapist gives Jane and Jim a homework assignment. The primary purpose is:", answer: "A", rationale: "To practice new interaction patterns outside the therapy session.", category: "Treatment" },
+  { q: "15-year-old Mark has difficulty making and maintaining friendships.", answer: "A", rationale: "Work on social skills and address underlying anxiety.", category: "Treatment" },
+  { q: "Miguel, age 9, experienced a traumatic event and is showing PTSD symptoms.", answer: "D", rationale: "Trauma-focused CBT is the most appropriate evidence-based approach.", category: "Treatment" },
+  { q: "A family cannot agree on household chore expectations for their 15-year-old.", answer: "A", rationale: "Help the family negotiate and establish clear, consistent expectations.", category: "Treatment" },
+  { q: "A new client is visibly anxious about beginning therapy.", answer: "A", rationale: "Focus on establishing rapport and creating a sense of safety.", category: "Treatment" },
+  { q: "A boss tells his assistant she is lazy. The assistant becomes angry. In REBT this illustrates:", answer: "D", rationale: "An activating event triggering an irrational belief and emotional consequence.", category: "Treatment" },
+  { q: "The primary goals of Gestalt therapy include:", answer: "B", rationale: "Increasing awareness and integrating disowned or unacknowledged parts of the self.", category: "Treatment" },
+  { q: "A husband frequently stays out late and the wife becomes increasingly disengaged.", answer: "D", rationale: "Address the pursuer-distancer dynamic between the partners.", category: "Treatment" },
+  { q: "A client believes that allowing interdependence with others limits their autonomy.", answer: "A", rationale: "This is a schema worth exploring therapeutically.", category: "Treatment" },
+  { q: "Parents bring their adult son who has recently come out as gay to family therapy.", answer: "B", rationale: "Focus on helping the family accept and support the son's identity.", category: "Treatment" },
+  { q: "A husband is projecting traits of his deceased mother onto his wife.", answer: "A", rationale: "This is an object relations dynamic that should be explored in therapy.", category: "Treatment" },
+  { q: "What is most important to consider when working with older adult clients?", answer: "C", rationale: "Addressing ageism and the unique developmental issues of later life.", category: "Treatment" },
+  { q: "Who would be the poorest candidate for participation in an outpatient therapy group?", answer: "C", rationale: "A client experiencing acute psychosis is the poorest candidate.", category: "Treatment" },
+  { q: "A Bowen therapist works with parents who focus exclusively on the identified patient.", answer: "A", rationale: "Redirect focus to the parents' own relationship and differentiation level.", category: "Treatment" },
+  { q: "A young child is preoccupied with the mother's whereabouts and cannot function independently.", answer: "C", rationale: "This pattern is consistent with anxious attachment.", category: "Treatment" },
+  { q: "A systemic therapist working with a single-parent family should primarily:", answer: "D", rationale: "Strengthen the executive functioning and boundaries of the single parent.", category: "Treatment" },
+  { q: "Which opening statement would NOT begin an appropriate intake dialogue?", answer: "C", rationale: "Beginning with questions about childhood history is not an appropriate intake opener.", category: "Treatment" },
+  { q: "A mother brings in her 4-year-old who has very high energy levels.", answer: "A", rationale: "Assess whether the behavior is developmentally appropriate before pathologizing it.", category: "Treatment" },
+  { q: "A family from an unfamiliar cultural background uses physical discipline.", answer: "A", rationale: "Explore the cultural context and meaning before making clinical assumptions.", category: "Treatment" },
+  { q: "When is the most appropriate time for an MFT to ask a client about their pronouns?", answer: "D", rationale: "At the start of treatment as part of standard intake procedures.", category: "Treatment" },
+  { q: "A 68-year-old recently retired man presents with depression.", answer: "C", rationale: "Address losses associated with retirement, aging, and changes in identity.", category: "Treatment" },
+  { q: "In a Satir session, John and Camilla are struggling with hoarding behavior.", answer: "A", rationale: "Explore the communication patterns and emotional meanings associated with hoarding.", category: "Treatment" },
+  { q: "A daughter brings her elderly mother to therapy against the mother's will.", answer: "A", rationale: "Assess the mother's cognitive status and willingness to engage in treatment.", category: "Treatment" },
+  { q: "A client abruptly terminates treatment and later wants to return.", answer: "B", rationale: "Explore the reasons for the termination and the motivation to return.", category: "Treatment" },
+  { q: "Healthy object relations is best characterized by:", answer: "C", rationale: "The capacity to maintain stable relationships while tolerating ambivalent feelings.", category: "Treatment" },
+  { q: "A client asks their Gestalt therapist if the exercises are silly.", answer: "B", rationale: "Explore the client's resistance directly as part of the therapeutic process.", category: "Treatment" },
+  { q: "The second stage of a therapy group is typically characterized by:", answer: "C", rationale: "Conflict, resistance, and power struggles among members.", category: "Treatment" },
+  { q: "A structural therapist working with Joanne and Robert should primarily:", answer: "D", rationale: "Challenge and restructure the family's hierarchical organization.", category: "Treatment" },
+  { q: "During a first session using a feminist approach with an intimate partner couple:", answer: "D", rationale: "Explore the power dynamics and societal influences on the relationship.", category: "Treatment" },
+  { q: "An Adlerian therapist observing children's aggressive play would focus on:", answer: "B", rationale: "The social purpose and goals behind the aggressive behavior.", category: "Treatment" },
+  { q: "An ego analyst working with Claire would primarily:", answer: "A", rationale: "Explore ego defenses and build adaptive capacities.", category: "Treatment" },
+  { q: "In Rogers' person-centered approach, maladaptive behavior is understood as:", answer: "A", rationale: "The result of conditions of worth that interfere with self-actualization.", category: "Treatment" },
+  { q: "Leslie, a 16-year-old, presents with significant body image concerns.", answer: "B", rationale: "Screen for an eating disorder.", category: "Treatment" },
+  { q: "Minuchin's structural interventions primarily include:", answer: "A", rationale: "Enactment, unbalancing, and boundary making.", category: "Treatment" },
+  { q: "Jay Haley's strategic therapy primarily targets:", answer: "A", rationale: "Power hierarchies within the family structure.", category: "Treatment" },
+  { q: "Dorrie is consistently blocking awareness of her feelings in therapy.", answer: "B", rationale: "The Gestalt therapist should directly explore the nature of the blocking.", category: "Treatment" },
+  { q: "A therapy group member consistently refuses to disclose anything personal.", answer: "B", rationale: "Gently explore the member's reluctance to disclose.", category: "Treatment" },
+  { q: "Sensate focus exercises are primarily used to treat:", answer: "D", rationale: "Sexual dysfunction.", category: "Treatment" },
+  { q: "A structural therapist works with a family whose child has ADHD.", answer: "B", rationale: "Establish clearer boundaries and reinforce the parental hierarchy.", category: "Treatment" },
+  { q: "A psychodynamic therapist uses play therapy with a child to access:", answer: "A", rationale: "Unconscious material and internal conflicts.", category: "Treatment" },
+  { q: "Cameron, 12, is about to be reunited with his mother who was just released from prison.", answer: "A", rationale: "Explore Cameron's feelings about the reunion.", category: "Treatment" },
+  { q: "Lourdes calls the MFT saying her adult son is missing during a hurricane.", answer: "B", rationale: "Help Lourdes access emergency services and available support systems.", category: "Treatment" },
+  { q: "A 15-year-old client is highly anxious about upcoming SAT exams.", answer: "A", rationale: "Address the anxiety using cognitive-behavioral strategies.", category: "Treatment" },
+  { q: "In solution-focused therapy the correct sequence of techniques is:", answer: "B", rationale: "Identify goals, find exceptions, use scaling questions, build on existing strengths.", category: "Treatment" },
+  { q: "A client from Peru is hesitant to discuss personal and family matters.", answer: "D", rationale: "Explore the cultural context around family privacy and appropriate disclosure.", category: "Treatment" },
+  { q: "Which of the following would a Satir therapist NOT do?", answer: "D", rationale: "A Satir therapist would not provide advice about medication.", category: "Treatment" },
+  { q: "Haley's strategic family therapy primarily focuses on:", answer: "C", rationale: "The family hierarchy and the function that symptoms serve in the system.", category: "Treatment" },
+  { q: "A client was recently mugged in their neighborhood.", answer: "C", rationale: "Assess for trauma symptoms and provide psychoeducation about trauma responses.", category: "Treatment" },
+  { q: "A child in play therapy becomes emotionally dysregulated during the session.", answer: "C", rationale: "Co-regulate by staying calm, present, and grounded.", category: "Treatment" },
+  { q: "Ash is a transgender teenager presenting for the first time for therapy.", answer: "B", rationale: "Affirm Ash's gender identity in the therapeutic relationship.", category: "Treatment" },
+  { q: "A client with borderline personality disorder becomes extremely and intensely angry.", answer: "C", rationale: "Stay calm, validate the emotion, and maintain appropriate therapeutic limits.", category: "Treatment" },
+  { q: "A Chinese family's grandmother talks to and communicates with deceased relatives.", answer: "A", rationale: "Understand this as a culturally normative spiritual practice.", category: "Treatment" },
+  { q: "A gay male client directly accuses the MFT of being homophobic.", answer: "A", rationale: "Explore the accusation non-defensively and with genuine curiosity.", category: "Treatment" },
+  { q: "A family using a strategic approach is stuck. A Rogers-trained therapist would suggest:", answer: "C", rationale: "Return to client-centered core conditions and the therapeutic relationship.", category: "Treatment" },
+  { q: "A woman who has worked with 4-5 previous therapists begins treatment with a new MFT.", answer: "A", rationale: "Explore the pattern of previous therapeutic relationships.", category: "Treatment" },
+  { q: "A new client arrives 20 minutes late to their very first therapy session.", answer: "B", rationale: "Explore the lateness therapeutically as potential clinical material.", category: "Treatment" },
+  { q: "Psychoanalysis facilitates the transformation of insight into behavioral change through:", answer: "B", rationale: "Working through the transference relationship.", category: "Treatment" },
+  { q: "A person-centered therapist is LEAST concerned with:", answer: "C", rationale: "Diagnosing or categorizing the client.", category: "Treatment" },
+  { q: "A Gestalt client keeps talking about past events and situations.", answer: "D", rationale: "Bring the past into the present moment using present-tense exploration.", category: "Treatment" },
+  { q: "A couple married for 12 years proudly states they have never had a fight.", answer: "C", rationale: "Explore patterns of conflict avoidance.", category: "Treatment" },
+  { q: "A client leaves a voicemail saying they are ending therapy immediately.", answer: "C", rationale: "Call the client back and schedule a termination session.", category: "Treatment" },
+
+  // ── Practice Exam 1 ────────────────────────────────────────────────────────
+  { q: "A client requests their therapy file but currently has an outstanding balance.", answer: "A", rationale: "The record must be provided except for information identifying a confidential third-party source.", category: "Law & Ethics" },
+  { q: "A Mexican American family with a higher socioeconomic status is referred for therapy. First action:", answer: "C", rationale: "Determine whether the MFT can maintain objectivity given the cultural and class dynamics.", category: "Law & Ethics" },
+  { q: "Which activities must occur during each telehealth session?", answer: "C", rationale: "Verify client name and location, assess safety, and review confidentiality limitations.", category: "Law & Ethics" },
+  { q: "A couple seeking premarital counseling hesitates when asked if they are married.", answer: "A", rationale: "Explore the significance of the question and the hesitation to the couple.", category: "Law & Ethics" },
+  { q: "A 15-year-old girl presents for therapy with parental consent. A policy should be established about:", answer: "C", rationale: "What information will and will not be shared with parents.", category: "Law & Ethics" },
+  { q: "In couple therapy, one partner calls with confidential information. The MFT should:", answer: "A", rationale: "Adhere to the confidentiality policy established at the beginning of treatment.", category: "Law & Ethics" },
+  { q: "Whether an elder abuse report is mandatory depends on the type of abuse and:", answer: "C", rationale: "Where the abuse occurred.", category: "Law & Ethics" },
+  { q: "An MFT intentionally assigns an inaccurate diagnosis to obtain insurance reimbursement.", answer: "B", rationale: "Insurance fraud.", category: "Law & Ethics" },
+  { q: "A 15-year-old discloses sexual intercourse with an adult to a school counselor. The counselor:", answer: "A", rationale: "Must report to Child Protective Services.", category: "Law & Ethics" },
+  { q: "An agency therapist must obtain authorization before:", answer: "B", rationale: "Consulting with the client's previous therapist.", category: "Law & Ethics" },
+  { q: "An MFT is asked to administer questionnaires for a research study. The MFT should:", answer: "A", rationale: "Explain to chosen clients that participation is voluntary and confidential without authorization.", category: "Law & Ethics" },
+  { q: "A client reveals she leaves her 6-year-old child home alone. The MFT should:", answer: "C", rationale: "Report to CPS and then continue to work therapeutically with the client.", category: "Law & Ethics" },
+  { q: "A 12-year-old seeks therapy without parental consent. Who is responsible for payment?", answer: "A", rationale: "The minor is personally responsible for the cost of services.", category: "Law & Ethics" },
+  { q: "The format and content of clinical records should be:", answer: "B", rationale: "Consistent with sound clinical practice.", category: "Law & Ethics" },
+  { q: "Two emancipated minors ages 14 and 16 have consensual sexual intercourse. This is:", answer: "C", rationale: "Non-reportable because the sexual activity was consensual between peers.", category: "Law & Ethics" },
+  { q: "When a therapist dies, their therapy records should be:", answer: "C", rationale: "Handled as specified in the therapist's professional will.", category: "Law & Ethics" },
+  { q: "A telehealth client is moving to a new city within the same state. Continuing treatment is:", answer: "A", rationale: "Legal and ethical as long as the client remains within the same state.", category: "Law & Ethics" },
+  { q: "A family with teenagers presents for therapy. The most ethically important initial question is:", answer: "C", rationale: "Determining which family members are considered the clients.", category: "Law & Ethics" },
+  { q: "A 20-year-old disabled woman reports her mother is refusing to assist with personal hygiene.", answer: "A", rationale: "The MFT is mandated to report dependent adult abuse.", category: "Law & Ethics" },
+  { q: "Treatment records must be provided to clients within how many working days?", answer: "B", rationale: "10 working days.", category: "Law & Ethics" },
+  { q: "A client discloses her husband hits her. Under California law, the MFT must report only if:", answer: "D", rationale: "The victim is a minor, elder, or dependent adult.", category: "Law & Ethics" },
+  { q: "Two children of divorced parents are in therapy. Which parents have access to the records?", answer: "B", rationale: "Both parents have the right to access the records.", category: "Law & Ethics" },
+  { q: "Jen's therapist Robbie becomes an MFT associate. Jen asks to see Robbie for therapy.", answer: "D", rationale: "Continue seeing Jen as a client and arrange for Robbie to receive supervision elsewhere.", category: "Law & Ethics" },
+  { q: "A new client recently released from prison becomes increasingly angry in session.", answer: "D", rationale: "Ask the client to describe his anger in more detail.", category: "Treatment" },
+  { q: "A client has a concrete lethal plan and multiple known suicide risk factors.", answer: "A", rationale: "This constitutes high suicide risk.", category: "Managing Crisis" },
+  { q: "A psychologist reports that Bob threatened someone but cannot share identifying information.", answer: "C", rationale: "Discuss the information with Bob in the next scheduled session.", category: "Managing Crisis" },
+  { q: "When counseling a client from a different racial background the MFT should:", answer: "C", rationale: "Ask the client whether they have any concerns about the racial difference in the initial session.", category: "Treatment" },
+  { q: "Tomas, age 23, expresses wanting to kill himself and has a prior suicide attempt.", answer: "A", rationale: "Call law enforcement or a mobile crisis team.", category: "Managing Crisis" },
+  { q: "An MFT is consulting with a colleague about a client named Karen. Permission is needed:", answer: "C", rationale: "The MFT does not need Karen's permission as long as her identity is not revealed.", category: "Law & Ethics" },
+  { q: "An adolescent client discloses active suicidal ideation. The MFT:", answer: "C", rationale: "May break confidentiality if necessary to protect the client.", category: "Managing Crisis" },
+  { q: "Misty is practicing EMDR in her sessions before completing certification.", answer: "C", rationale: "This is a breach of both legal and ethical standards.", category: "Law & Ethics" },
+  { q: "After warning a potential victim and notifying police about a credible threat, the MFT is:", answer: "C", rationale: "Protected from civil and criminal liability.", category: "Law & Ethics" },
+  { q: "An MFT is co-authoring a research paper with a graduate student. Publication credit should:", answer: "D", rationale: "Acknowledge each person's contribution consistently with their actual work.", category: "Law & Ethics" },
+  { q: "A client cancels with less than 48 hours notice. The MFT may charge a fee only if:", answer: "D", rationale: "The cancellation fee policy was clearly discussed at the beginning of treatment.", category: "Law & Ethics" },
+  { q: "A young man has a history of criminal offenses that would make the MFT uncomfortable.", answer: "B", rationale: "Provide appropriate referrals to another therapist.", category: "Law & Ethics" },
+  { q: "Bill Jones has cerebral palsy and lives in a residential facility. Staff appears neglectful.", answer: "A", rationale: "Report suspected dependent adult abuse.", category: "Law & Ethics" },
+  { q: "Dan is currently seeing two different therapists simultaneously. The MFT should:", answer: "B", rationale: "Consider the client's needs and whether there is unnecessary duplication of services.", category: "Law & Ethics" },
+  { q: "A terminated family wants copies of their therapy records. The MFT should:", answer: "A", rationale: "Send records accompanied by signed authorizations from all clients.", category: "Law & Ethics" },
+  { q: "The minimum age for a minor to consent to outpatient alcohol or drug treatment is:", answer: "B", rationale: "12 years old.", category: "Law & Ethics" },
+  { q: "An MFT maintains a home office with electronic records on a computer. The computer must:", answer: "A", rationale: "Have secure access controls to protect client information.", category: "Law & Ethics" },
+  { q: "A former client now age 22 was seen at age 14. Records must be sent within:", answer: "C", rationale: "15 business days of the written request.", category: "Law & Ethics" },
+  { q: "An MFT learns that their husband's secretary has become a new client. This is:", answer: "D", rationale: "The most clearly unethical dual relationship.", category: "Law & Ethics" },
+  { q: "An MFT receives a $25 referral fee for sending clients to another provider.", answer: "C", rationale: "Unethical if the payment is solely for making the referral.", category: "Law & Ethics" },
+  { q: "After 14 months with no measurable therapeutic progress, the MFT should:", answer: "B", rationale: "Raise the possibility of termination.", category: "Law & Ethics" },
+  { q: "Which of the following is NOT a required element of informed consent?", answer: "A", rationale: "Receptiveness is not a required element of informed consent.", category: "Law & Ethics" },
+  { q: "A client has a history of hitting his wife and recently assaulted a stranger.", answer: "A", rationale: "Maintain confidentiality while monitoring for future violence.", category: "Law & Ethics" },
+  { q: "The conditions required for a 72-hour or 14-day involuntary psychiatric hold include:", answer: "D", rationale: "Danger to self, danger to others, or grave disability.", category: "Managing Crisis" },
+  { q: "John is 19 with chronic schizophrenia and has a conservator. Consent for treatment is given by:", answer: "D", rationale: "The conservator gives consent for treatment.", category: "Law & Ethics" },
+  { q: "Ms. Chang is an MFT whose new gay client makes her feel uncomfortable. She should:", answer: "C", rationale: "Seek professional assistance, and if discomfort persists, seek additional guidance.", category: "Law & Ethics" },
+  { q: "Electronic therapy under the CAMFT Code of Ethics requires discussion of:", answer: "D", rationale: "The potential risks and benefits of receiving therapy electronically.", category: "Law & Ethics" },
+  { q: "Libby wants to use recordings of her clients' sessions for her graduate class.", answer: "D", rationale: "Written authorization from all recorded clients is required.", category: "Law & Ethics" },
+  { q: "A 5150 involuntary psychiatric hold can be legally initiated by:", answer: "C", rationale: "A mental health professional designated by the county.", category: "Managing Crisis" },
+  { q: "A client loses their insurance coverage and can no longer afford therapy. The MFT should:", answer: "B", rationale: "Discuss the client's available options.", category: "Law & Ethics" },
+  { q: "An MFT should NEVER:", answer: "B", rationale: "Advise a client about medication dosage.", category: "Law & Ethics" },
+  { q: "A subpoena has been received and determined to be valid. The MFT should:", answer: "C", rationale: "Contact the client to discuss the subpoena and obtain consent.", category: "Law & Ethics" },
+  { q: "Dorothy and Ira share joint legal custody. Who can provide consent to their child's treatment?", answer: "C", rationale: "Either parent alone may provide consent for treatment.", category: "Law & Ethics" },
+  { q: "Penelope is texting her therapy client and sending articles between sessions.", answer: "A", rationale: "Discuss boundaries and the therapeutic relationship in session.", category: "Law & Ethics" },
+  { q: "Allison discovers that her adult son with autism is being deprived of food by residential staff.", answer: "C", rationale: "Report the dependent adult abuse immediately, even while still in session.", category: "Law & Ethics" },
+  { q: "Maria Elena brings a gift of cookies to a therapy session. The MFT should:", answer: "C", rationale: "Accept the gift but explore its meaning therapeutically.", category: "Treatment" },
+  { q: "A client reports that a previous therapist made sexual advances toward them.", answer: "C", rationale: "Inform the client of their alternatives for addressing the situation.", category: "Law & Ethics" },
+  { q: "A woman in a domestic violence shelter discloses her husband beat her 5-year-old son.", answer: "C", rationale: "Report the child abuse.", category: "Law & Ethics" },
+  { q: "Which of the following activities is outside the legal scope of an LMFT's practice?", answer: "A", rationale: "Advising clients about nutritional supplements, diet, and exercise.", category: "Law & Ethics" },
+  { q: "Miss Goodwin had a sexual relationship with her client's husband. She should:", answer: "D", rationale: "Not see the wife or the couple together and instead provide referrals.", category: "Law & Ethics" },
+  { q: "Sue and Stan are in couples therapy. Sue calls privately to reveal information.", answer: "A", rationale: "Follow the confidentiality policy established at the beginning of treatment.", category: "Law & Ethics" },
+  { q: "A mental health record summary does NOT need to include:", answer: "B", rationale: "The initial goals of counseling.", category: "Law & Ethics" },
+  { q: "Confidentiality does NOT need to be breached when:", answer: "C", rationale: "An adult client discloses they were sexually abused as a teenager.", category: "Law & Ethics" },
+  { q: "The most important ethical consideration when conducting research is:", answer: "B", rationale: "Whether participants have sufficient information to give truly informed consent.", category: "Law & Ethics" },
+  { q: "Bridget is a transgender client who is visibly shaking and experiencing anxiety.", answer: "B", rationale: "Refer Bridget to a physician to evaluate the medical-related symptoms.", category: "Law & Ethics" },
+  { q: "Maggie's husband is verbally and physically abusive. The MFT should:", answer: "C", rationale: "Assess the level of danger and develop a safety plan collaboratively.", category: "Managing Crisis" },
+  { q: "A minor may receive outpatient mental health treatment without parental consent if they are:", answer: "C", rationale: "At least 12 years old and it would be inappropriate to involve the parents.", category: "Law & Ethics" },
+  { q: "Mrs. Saledo has a 16-year-old in therapy who consented. Parents call for information.", answer: "B", rationale: "Do not provide any information without the client's explicit authorization.", category: "Law & Ethics" },
+  { q: "California law requires a serious threat to be reported to law enforcement within:", answer: "A", rationale: "24 hours.", category: "Law & Ethics" },
+  { q: "The 988 Suicide and Crisis Lifeline toll-free number is for:", answer: "C", rationale: "Emergency mental health services including suicidal crises and substance abuse.", category: "Managing Crisis" },
+  { q: "A mother of a recently deceased daughter requests her daughter's therapy records.", answer: "A", rationale: "Do not release records without proper authorization.", category: "Law & Ethics" },
+  { q: "A client discloses a plan to slash a neighbor's car tires. The MFT should:", answer: "D", rationale: "Maintain confidentiality because property damage alone does not trigger a Tarasoff duty to warn.", category: "Law & Ethics" },
+
+  // ── Case Conceptualization ─────────────────────────────────────────────────
+  { q: "Joe and Doris arrive for couples therapy. Joe says the therapist has been taking sides.", answer: "B", rationale: "Validate Joe's concern, acknowledge any mistake, and work to rebuild the therapeutic alliance.", category: "Case Conceptualization" },
+  { q: "A 27-year-old with anxiety is defensively resistant to a psychiatric evaluation referral.", answer: "B", rationale: "Explain that a psychiatric evaluation could support and enhance the therapeutic process.", category: "Case Conceptualization" },
+  { q: "Hunter and Amy are divorced and in ongoing conflict over child custody.", answer: "D", rationale: "Allow both parents to express their feelings and ask each to consider the child's best interests.", category: "Case Conceptualization" },
+  { q: "David, age 22, has MDD and consistently refuses referrals to additional services.", answer: "C", rationale: "Continue treatment but therapeutically process the meaning of David's refusals.", category: "Case Conceptualization" },
+  { q: "A strategic therapist works with a heterosexual couple who argues constantly. The therapist:", answer: "C", rationale: "Prescribes the symptom by instructing them to argue for two hours each evening.", category: "Case Conceptualization" },
+  { q: "Research on behavioral and CBT treatments for ADHD in children has found:", answer: "C", rationale: "Short-term effectiveness but limited long-term benefits.", category: "Case Conceptualization" },
+  { q: "During the beginning stages of REBT the therapist's primary task is to:", answer: "C", rationale: "Identify activating events that trigger irrational beliefs.", category: "Case Conceptualization" },
+  { q: "The Smith family brings in Jan who is disruptive. Mother Linda objects to play therapy.", answer: "B", rationale: "Explore what Linda means by her objection and discuss the reasons for the referral.", category: "Case Conceptualization" },
+  { q: "Jay's spouse is actively enabling his cocaine addiction. The MFT should refer her to:", answer: "C", rationale: "NarAnon.", category: "Case Conceptualization" },
+  { q: "The Green family presents with daughter Susie, who has been setting fires at home.", answer: "D", rationale: "Refer Susie for a psychiatric evaluation.", category: "Case Conceptualization" },
+  { q: "Ann, Mike, and their 20-year-old daughter Tanya present for family therapy. Tanya uses cocaine.", answer: "A", rationale: "The first action is to define the goals of therapy with all family members.", category: "Case Conceptualization" },
+  { q: "A Bowen therapist works with the Chan family where Alex has frequent outbursts. Detriangulation:", answer: "D", rationale: "Work with the parents to address their arguing directly rather than routing it through Alex.", category: "Case Conceptualization" },
+  { q: "A four-year-old is wetting and soiling unexpectedly after being toilet trained.", answer: "B", rationale: "Investigate recent stressors and develop an appropriate behavior modification plan.", category: "Case Conceptualization" },
+  { q: "In an initial session with a Black family, the therapist is of a different race. The MFT should:", answer: "B", rationale: "Acknowledge and openly discuss the impact of the racial difference.", category: "Case Conceptualization" },
+  { q: "The most important task during the initial stage of individual therapy is:", answer: "A", rationale: "Establishing a strong therapeutic rapport.", category: "Case Conceptualization" },
+  { q: "A 10-year-old boy constantly listens to music through headphones and refuses to engage.", answer: "D", rationale: "Ask about the music and listen to it together with the boy.", category: "Case Conceptualization" },
+  { q: "Michael, a 68-year-old, is exploring identity questions in Gestalt therapy. The therapist should:", answer: "C", rationale: "Encourage Michael to turn his questions about identity into direct statements.", category: "Case Conceptualization" },
+  { q: "A five-year-old diagnosed with ADHD develops shaking and severe headaches.", answer: "C", rationale: "Advise the mother to take the child to a psychiatrist immediately.", category: "Case Conceptualization" },
+  { q: "Donald, age 15, is on probation and his father is very angry about the situation.", answer: "B", rationale: "Begin by acknowledging the father's position and concerns.", category: "Case Conceptualization" },
+  { q: "Zac and Michael are in marital therapy. The MFT suspects Michael is drinking heavily.", answer: "C", rationale: "Directly confront Michael about the suspected alcohol use.", category: "Case Conceptualization" },
+  { q: "Carol and Zach's son Danny has regressed in behavior since a new baby sister arrived.", answer: "B", rationale: "Provide psychoeducation about normal behavioral responses to a new sibling.", category: "Case Conceptualization" },
+  { q: "A court-referred couple is seeking permission for their minor children to marry.", answer: "B", rationale: "Educate the couple about the social, economic, and personal responsibilities of marriage.", category: "Case Conceptualization" },
+  { q: "Krista, a 10-year-old, has developed a persistent refusal to attend school.", answer: "D", rationale: "The most important goal is getting the child back to school as soon as possible.", category: "Case Conceptualization" },
+  { q: "Which therapy is most contraindicated for a client with Avoidant Personality Disorder?", answer: "C", rationale: "Gestalt therapy is most contraindicated due to its confrontational nature.", category: "Case Conceptualization" },
+  { q: "Mary and Justin's 13-year-old brought a knife to school. The parents are divorced.", answer: "D", rationale: "Conduct family therapy including Justin and both parents.", category: "Case Conceptualization" },
+  { q: "Mr. Jackson, a 72-year-old man, reports experiencing impotence.", answer: "B", rationale: "Refer Mr. Jackson to a physician for a thorough medical evaluation.", category: "Case Conceptualization" },
+  { q: "Daniel and Haasim are beginning EFT couples therapy. The primary task at this stage:", answer: "A", rationale: "Identify the couple's negative interaction cycle.", category: "Case Conceptualization" },
+  { q: "The Jensen family reports things have gotten worse since starting therapy and wants to quit.", answer: "B", rationale: "Reframe the escalation as a learning opportunity and a sign of change.", category: "Case Conceptualization" },
+  { q: "Group therapy members are resisting efforts to shift to examining individual issues.", answer: "A", rationale: "Allow members to fully express their resistance.", category: "Case Conceptualization" },
+  { q: "Jim, Tina, and Javier are in structural family therapy. Which pattern describes their dynamic?", answer: "C", rationale: "An unstable coalition.", category: "Case Conceptualization" },
+  { q: "A 15-year-old has stolen a car and has a history of conduct problems.", answer: "D", rationale: "Implement family therapy with behavioral modification at home and school.", category: "Case Conceptualization" },
+  { q: "Manny, 19, spends excessive time on social media and is struggling with his sense of identity.", answer: "B", rationale: "Set limits on social media use and identify activities that foster a stronger sense of self.", category: "Case Conceptualization" },
+  { q: "A middle-aged woman's husband has experienced impotence since his cardiac bypass surgery.", answer: "B", rationale: "Recommend they follow up with a physician to rule out physical causes.", category: "Case Conceptualization" },
+  { q: "A Black family is discussing feelings about recent media coverage of racial injustices.", answer: "B", rationale: "Work collaboratively to identify their specific needs and expectations and discuss their values.", category: "Case Conceptualization" },
+  { q: "An 8-year-old boy in foster care spontaneously draws a very violent picture.", answer: "A", rationale: "Ask the boy to tell you about his picture.", category: "Case Conceptualization" },
+  { q: "A 38-year-old African American woman presents because her husband recently lost his job.", answer: "C", rationale: "Directive, time-limited, problem-solving family therapy is most appropriate.", category: "Case Conceptualization" },
+  { q: "A client has missed multiple appointments and shows minimal participation when present.", answer: "D", rationale: "Therapeutically address the pattern of absences and lack of participation.", category: "Case Conceptualization" },
+  { q: "The MMPI-2 assessment instrument is most useful for identifying:", answer: "B", rationale: "Characteristic personality traits and behavioral patterns.", category: "Case Conceptualization" },
+  { q: "A 32-year-old client discloses he has been taking his wife's antidepressant medication.", answer: "B", rationale: "Refer him to a psychiatrist for evaluation and proper treatment.", category: "Case Conceptualization" },
+  { q: "A structural therapist meets a new family in which the son has been experimenting with drugs.", answer: "B", rationale: "Join with the family first and use family mapping to understand the structure.", category: "Case Conceptualization" },
+];
+
+// ── Fuzzy Matching ─────────────────────────────────────────────────────────────
+const STOP_WORDS = new Set(['the','a','an','is','are','was','were','be','been','being','have',
+  'has','had','do','does','did','will','would','could','should','may','might','shall','to',
+  'of','in','for','on','with','at','by','from','as','or','and','but','if','not','no','this',
+  'that','these','those','it','its','they','their','you','your','he','she','we','his','her',
+  'which','who','whom','what','when','where','how','why','than','then','more','most','also',
+  'just','both','each','few','all','any','some','such','into','through','during','before',
+  'after','above','below','between','up','down','out','off','over','under','again','further',
+  'once','here','there','about','against','because','while','since','until','although','very',
+  'first','last','new','old','one','two','three','four','five','six','seven','eight','nine',
+  'ten','get','give','go','come','take','make','see','say','ask','tell','want','need','use',
+  'show','know','think','feel','find','work','try','call','put','keep','let','begin','start',
+  'end','become','seem','appear','remain','become','her','him','our','their','my','your']);
+
+function normalizeText(text) {
+  return text.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function tokenize(text) {
+  return normalizeText(text).split(' ').filter(w => w.length >= 3 && !STOP_WORDS.has(w));
+}
+
+function jaccardSimilarity(setA, setB) {
+  const intersection = new Set([...setA].filter(x => setB.has(x)));
+  const union = new Set([...setA, ...setB]);
+  return union.size === 0 ? 0 : intersection.size / union.size;
+}
+
+function scoreConfidence(sim) {
+  if (sim >= 0.40) return 5;
+  if (sim >= 0.25) return 4;
+  if (sim >= 0.12) return 3;
+  if (sim >= 0.05) return 2;
+  return 1;
+}
+
+// ── Lookup Functions ──────────────────────────────────────────────────────────
+function startLookup() {
+  showScreen('screen-lookup');
+  resetLookup();
+}
+
+function lookupQuestion() {
+  const input = document.getElementById('lookup-textarea').value.trim();
+  if (!input) return;
+
+  const queryTokens = new Set(tokenize(input));
+  if (queryTokens.size === 0) return;
+
+  let bestScore = -1;
+  let bestMatch = null;
+
+  for (const entry of QUESTION_BANK) {
+    const entryTokens = new Set(tokenize(entry.q));
+    const sim = jaccardSimilarity(queryTokens, entryTokens);
+    if (sim > bestScore) {
+      bestScore = sim;
+      bestMatch = entry;
+    }
+  }
+
+  if (!bestMatch) return;
+
+  const conf = scoreConfidence(bestScore);
+  renderLookupResult(bestMatch, conf);
+}
+
+function renderLookupResult(match, conf) {
+  document.getElementById('result-letter').textContent = match.answer;
+  document.getElementById('result-answer-text').textContent = 'Answer ' + match.answer;
+  document.getElementById('result-category').textContent = match.category;
+  document.getElementById('result-rationale').textContent = match.rationale;
+
+  // Confidence dots
+  const dotsEl = document.getElementById('conf-dots');
+  dotsEl.innerHTML = '';
+  const colorClass = conf >= 4 ? 'high' : conf <= 2 ? 'low' : '';
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'conf-dot' + (i <= conf ? ' filled ' + colorClass : '');
+    dotsEl.appendChild(dot);
+  }
+  const labels = ['','Very Low','Low','Moderate','High','Very High'];
+  document.getElementById('conf-score-text').textContent = labels[conf] + ' (' + conf + '/5)';
+
+  // Warning for low confidence
+  const warn = document.getElementById('lookup-warn');
+  warn.style.display = conf <= 2 ? 'block' : 'none';
+
+  // Show result, hide input area
+  document.getElementById('lookup-input-area').style.display = 'none';
+  document.getElementById('lookup-result').style.display = 'block';
+}
+
+function resetLookup() {
+  document.getElementById('lookup-textarea').value = '';
+  document.getElementById('lookup-input-area').style.display = 'block';
+  document.getElementById('lookup-result').style.display = 'none';
+}
 </script>
 </body>
 </html>
