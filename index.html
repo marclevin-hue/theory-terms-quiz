@@ -2039,7 +2039,7 @@ const QUESTION_BANK = [
   { q: "A couple escalates arguments when one partner makes an offensive comment and the other responds with a similar comment. This communication pattern is BEST described as:", answer: "A", rationale: "Symmetrical communication (also called symmetrical escalation) occurs when each partner mirrors the other's behavior, leading to escalating conflict.", category: "Practice Exam 1" },
   { q: "A 22-year-old presents with self-cutting and intense fear of abandonment. Which therapy is MOST appropriate?", answer: "B", rationale: "Dialectical Behavior Therapy (DBT) was specifically developed for individuals with borderline features including self-harm and fear of abandonment.", category: "Practice Exam 1" },
   { q: "Bruce and James have been in a relationship with ongoing domestic violence. The MOST appropriate recommendation is:", answer: "B", rationale: "Couples therapy is contraindicated when domestic violence is present. The therapist should provide referrals for individual anger management and individual therapy.", category: "Practice Exam 1" },
-  { q: "Which of the following is the BEST example of negative reinforcement?", answer: "C", rationale: "Negative reinforcement involves removing an aversive stimulus to increase behavior. Removing restrictions when a child helps with chores removes an aversive condition, reinforcing the behavior.", category: "Practice Exam 1" },
+  { q: "A behavioral therapist advises parents to remove their child's restrictions when he helps with chores such as dinner dishes and taking out the trash. This is an example of which behavioral concept?", answer: "C", rationale: "Negative reinforcement involves removing an aversive stimulus to increase behavior. Removing restrictions when a child helps with chores removes an aversive condition, reinforcing the behavior.", category: "Practice Exam 1" },
   { q: "A man is performing poorly at work, has difficulties finishing tasks and interacting with coworkers, and feels stressed. Using a cognitive approach, what should the therapist do first?", answer: "C", rationale: "Keeping a daily journal of automatic thoughts is a core cognitive therapy technique to help clients identify and challenge dysfunctional thought patterns.", category: "Practice Exam 1" },
   { q: "Valerie reports that her son Andy becomes aggressive after visiting his father. What should the therapist do FIRST?", answer: "B", rationale: "When a child shows behavioral changes after visiting a parent, the therapist should see the child alone to assess for possible abuse without the parent present.", category: "Practice Exam 1" },
   { q: "A therapist is interviewing a 6-year-old child who may have been abused. What type of questions should be used?", answer: "B", rationale: "Open-ended, appropriately structured questions are best for child interviews to avoid leading the child and ensure the reliability of information obtained.", category: "Practice Exam 1" },
@@ -2193,10 +2193,10 @@ function cosineSimilarity(setA, setB) {
 }
 
 function scoreConfidence(sim) {
-  if (sim >= 0.35) return 5;
-  if (sim >= 0.22) return 4;
-  if (sim >= 0.12) return 3;
-  if (sim >= 0.05) return 2;
+  if (sim >= 0.26) return 5;
+  if (sim >= 0.15) return 4;
+  if (sim >= 0.08) return 3;
+  if (sim >= 0.04) return 2;
   return 1;
 }
 
