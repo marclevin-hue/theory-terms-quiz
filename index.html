@@ -2040,7 +2040,7 @@ const QUESTION_BANK = [
   { q: "A 22-year-old presents with self-cutting and intense fear of abandonment. Which therapy is MOST appropriate?", answer: "B", rationale: "Dialectical Behavior Therapy (DBT) was specifically developed for individuals with borderline features including self-harm and fear of abandonment.", category: "Practice Exam 1" },
   { q: "Bruce and James have been in a relationship with ongoing domestic violence. The MOST appropriate recommendation is:", answer: "B", rationale: "Couples therapy is contraindicated when domestic violence is present. The therapist should provide referrals for individual anger management and individual therapy.", category: "Practice Exam 1" },
   { q: "Which of the following is the BEST example of negative reinforcement?", answer: "C", rationale: "Negative reinforcement involves removing an aversive stimulus to increase behavior. Removing restrictions when a child helps with chores removes an aversive condition, reinforcing the behavior.", category: "Practice Exam 1" },
-  { q: "A cognitive therapist is working with a man experiencing poor work performance. What would be the MOST appropriate intervention?", answer: "C", rationale: "Keeping a daily journal of automatic thoughts is a core cognitive therapy technique to help clients identify and challenge dysfunctional thought patterns.", category: "Practice Exam 1" },
+  { q: "A man is performing poorly at work, has difficulties finishing tasks and interacting with coworkers, and feels stressed. Using a cognitive approach, what should the therapist do first?", answer: "C", rationale: "Keeping a daily journal of automatic thoughts is a core cognitive therapy technique to help clients identify and challenge dysfunctional thought patterns.", category: "Practice Exam 1" },
   { q: "Valerie reports that her son Andy becomes aggressive after visiting his father. What should the therapist do FIRST?", answer: "B", rationale: "When a child shows behavioral changes after visiting a parent, the therapist should see the child alone to assess for possible abuse without the parent present.", category: "Practice Exam 1" },
   { q: "A therapist is interviewing a 6-year-old child who may have been abused. What type of questions should be used?", answer: "B", rationale: "Open-ended, appropriately structured questions are best for child interviews to avoid leading the child and ensure the reliability of information obtained.", category: "Practice Exam 1" },
   { q: "A client reports that a previous therapist made sexual advances toward them. The current therapist's BEST response is to:", answer: "C", rationale: "The therapist should inform the client of their options, including filing a complaint, without pressuring them, respecting client autonomy while ensuring they are aware of recourse.", category: "Practice Exam 1" },
@@ -2171,15 +2171,30 @@ function tokenize(text) {
   return normalizeText(text).split(' ').filter(w => w.length >= 3 && !STOP_WORDS.has(w));
 }
 
-function jaccardSimilarity(setA, setB) {
-  const intersection = new Set([...setA].filter(x => setB.has(x)));
-  const union = new Set([...setA, ...setB]);
-  return union.size === 0 ? 0 : intersection.size / union.size;
+// Strip answer choices and boilerplate before tokenizing.
+// Handles pasted AATBS exam questions that include A/B/C/D options.
+function preprocessQuery(raw) {
+  let s = raw;
+  // Step 1: Remove everything from "Select one:" onwards (this strips all answer choices)
+  s = s.replace(/select\s+one[\s\S]*/i, '');
+  // Step 2: Remove trailing "Question NN" numbering left after step 1
+  s = s.replace(/\bquestion\s*\d+\s*/gi, '');
+  // Step 3: Remove any remaining "Correct" labels
+  s = s.replace(/\bCorrect\b/g, '');
+  return s.replace(/\s+/g, ' ').trim();
+}
+
+// Cosine-like similarity: |intersection| / sqrt(|A| * |B|).
+// Unlike Jaccard, this does not collapse when query length >> db entry length.
+function cosineSimilarity(setA, setB) {
+  const intersection = [...setA].filter(x => setB.has(x)).length;
+  const denom = Math.sqrt(setA.size * setB.size);
+  return denom === 0 ? 0 : intersection / denom;
 }
 
 function scoreConfidence(sim) {
-  if (sim >= 0.40) return 5;
-  if (sim >= 0.25) return 4;
+  if (sim >= 0.35) return 5;
+  if (sim >= 0.22) return 4;
   if (sim >= 0.12) return 3;
   if (sim >= 0.05) return 2;
   return 1;
@@ -2234,7 +2249,9 @@ function lookupQuestion() {
   const input = document.getElementById('lookup-textarea').value.trim();
   if (!input) return;
 
-  const queryTokens = new Set(tokenize(input));
+  // Strip answer choices so pasted exam questions match correctly
+  const cleaned = preprocessQuery(input);
+  const queryTokens = new Set(tokenize(cleaned));
   if (queryTokens.size === 0) return;
 
   let bestScore = -1;
@@ -2242,7 +2259,7 @@ function lookupQuestion() {
 
   for (const entry of QUESTION_BANK) {
     const entryTokens = new Set(tokenize(entry.q));
-    const sim = jaccardSimilarity(queryTokens, entryTokens);
+    const sim = cosineSimilarity(queryTokens, entryTokens);
     if (sim > bestScore) {
       bestScore = sim;
       bestMatch = entry;
