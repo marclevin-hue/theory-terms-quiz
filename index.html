@@ -1036,6 +1036,18 @@
       font-style: italic;
     }
 
+    .lookup-matched-q {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.55;
+      margin: 0 0 18px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      border-left: 3px solid var(--border);
+    }
+
     .lookup-warn {
       background: rgba(194,74,65,0.1);
       border: 1px solid rgba(194,74,65,0.3);
@@ -1321,11 +1333,14 @@
             </div>
           </div>
 
+          <p class="lookup-rationale-label">Matched question</p>
+          <p class="lookup-matched-q" id="result-matched-q">—</p>
+
           <p class="lookup-rationale-label">Rationale</p>
           <p class="lookup-rationale-text" id="result-rationale">—</p>
 
           <div id="lookup-warn" class="lookup-warn" style="display:none;">
-            ⚠️ Low confidence — this question may not be in the database. Verify the answer before relying on it.
+            ⚠️ This question was not found in our database. The answer shown is from the closest matching question — verify before relying on it.
           </div>
         </div>
 
@@ -2424,13 +2439,14 @@ function lookupQuestion() {
   if (!bestMatch) return;
 
   const conf = scoreConfidence(bestScore);
-  renderLookupResult(bestMatch, conf);
+  renderLookupResult(bestMatch, conf, bestScore);
 }
 
-function renderLookupResult(match, conf) {
+function renderLookupResult(match, conf, rawScore) {
   document.getElementById('result-letter').textContent = match.answer;
   document.getElementById('result-answer-text').textContent = 'Answer ' + match.answer;
   document.getElementById('result-category').textContent = match.category;
+  document.getElementById('result-matched-q').textContent = match.q;
   document.getElementById('result-rationale').textContent = match.rationale;
 
   // Confidence dots
@@ -2445,9 +2461,9 @@ function renderLookupResult(match, conf) {
   const labels = ['','Very Low','Low','Moderate','High','Very High'];
   document.getElementById('conf-score-text').textContent = labels[conf] + ' (' + conf + '/5)';
 
-  // Warning for low confidence
+  // Warning: show if low confidence OR if raw similarity is below "exact match" threshold
   const warn = document.getElementById('lookup-warn');
-  warn.style.display = conf <= 2 ? 'block' : 'none';
+  warn.style.display = (conf <= 2 || rawScore < 0.45) ? 'block' : 'none';
 
   // Show result, hide input area
   document.getElementById('lookup-input-area').style.display = 'none';
