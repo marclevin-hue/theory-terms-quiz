@@ -1117,6 +1117,102 @@
       .complete-btns { grid-template-columns: 1fr; }
       .btn { padding: 11px 16px; font-size: 0.83rem; min-width: 0 !important; }
     }
+
+    /* ── DIAGNOSIS TERMS SCREEN ── */
+    #screen-diagnosis-terms {
+      justify-content: flex-start;
+      padding-top: 28px;
+      padding-left: 10px;
+      padding-right: 10px;
+      width: 100vw;
+    }
+
+    .dx-body {
+      width: 100%;
+      max-width: 820px;
+    }
+
+    .dx-page-title {
+      font-family: var(--ff-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .dx-page-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .dx-group {
+      margin-bottom: 32px;
+    }
+
+    .dx-group-header {
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(212,145,58,0.25);
+    }
+
+    .dx-diagnosis {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+    }
+
+    .dx-diagnosis-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--accent-lt);
+      margin-bottom: 10px;
+    }
+
+    .dx-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .dx-pill {
+      background: rgba(212,145,58,0.12);
+      border: 1px solid rgba(212,145,58,0.22);
+      color: var(--text);
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .dx-learnings {
+      list-style: none;
+      padding: 0;
+    }
+
+    .dx-learnings li {
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding: 3px 0 3px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .dx-learnings li::before {
+      content: '›';
+      position: absolute;
+      left: 4px;
+      color: var(--accent);
+    }
+
   </style>
 </head>
 <body>
@@ -1168,6 +1264,20 @@
         <div>
           <div class="mode-name">Question Lookup</div>
           <div class="mode-desc">Paste an exam question to find the most likely answer with confidence score</div>
+        </div>
+      </div>
+      <div class="mode-tile" onclick="showDiagnosisTerms()" style="grid-column: 1 / -1; display: flex; flex-direction: row; align-items: center; gap: 18px; padding: 22px 26px;">
+        <div class="mode-icon" style="margin-bottom: 0; flex-shrink: 0;">
+          <svg viewBox="0 0 18 18" fill="none" stroke="var(--accent-lt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 2h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/>
+            <line x1="5" y1="6" x2="13" y2="6"/>
+            <line x1="5" y1="9" x2="11" y2="9"/>
+            <line x1="5" y1="12" x2="9" y2="12"/>
+          </svg>
+        </div>
+        <div>
+          <div class="mode-name">Key Terms by Diagnosis</div>
+          <div class="mode-desc">Core concepts and exam patterns for Mood, Personality, Sexual, and Addiction disorders</div>
         </div>
       </div>
     </div>
@@ -1412,6 +1522,338 @@
         <button class="lookup-try-again" onclick="resetLookup()">← Try Another Question</button>
       </div>
     </div>
+  </section>
+
+  <!-- ════════════ KEY TERMS BY DIAGNOSIS ════════════ -->
+  <section id="screen-diagnosis-terms" class="screen">
+    <nav class="quiz-nav">
+      <button class="quiz-nav-home" onclick="goHome()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 7l6-6 6 6"/><path d="M2.5 5.5V13h3.5V9h2v4h3.5V5.5"/>
+        </svg>
+      </button>
+    </nav>
+    <div class="dx-body">
+      <p class="dx-page-title">Key Terms by Diagnosis Type</p>
+      <p class="dx-page-sub">Core concepts, treatments, and exam patterns drawn from 900+ practice questions</p>
+
+      <!-- ── MOOD ── -->
+      <div class="dx-group">
+        <div class="dx-group-header">Mood Disorders</div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Trauma / PTSD</div>
+          <div class="dx-pills">
+            <span class="dx-pill">EMDR</span>
+            <span class="dx-pill">Trauma-focused CBT</span>
+            <span class="dx-pill">Acute Stress Disorder</span>
+            <span class="dx-pill">Safety · Trustworthiness · Empowerment</span>
+            <span class="dx-pill">Crisis intervention</span>
+            <span class="dx-pill">DID / Dissociation</span>
+            <span class="dx-pill">Mandated reporting</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Acute stress disorder = symptoms lasting <strong>3 days – 1 month</strong> post-trauma; PTSD if beyond 1 month</li>
+            <li>Refer to support group only <strong>after</strong> the acute phase has subsided — groups are contraindicated acutely</li>
+            <li>Trauma-informed care: assume a trauma history; prioritize safety and accessibility for all clients</li>
+            <li>With rape/assault: address <strong>medical → emotional → legal</strong> concerns; first step is always physical exam</li>
+            <li>IPV with children present = <strong>mandated report</strong> even if children are not directly abused</li>
+            <li>DID hallmark: two or more distinct personality states + recurrent amnesia; treated with psychotherapy</li>
+            <li>For veterans with PTSD: EMDR + veterans' programs + family/parenting support is the comprehensive combo</li>
+            <li>Couples post-assault: establish explicit <strong>consent + trigger communication</strong> before resuming intimacy</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Depression / MDD</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Beck Depression Inventory-II</span>
+            <span class="dx-pill">Suicide risk assessment</span>
+            <span class="dx-pill">Hopelessness = strongest predictor</span>
+            <span class="dx-pill">5150 / involuntary hold</span>
+            <span class="dx-pill">CBT</span>
+            <span class="dx-pill">Reminiscence therapy (elderly)</span>
+            <span class="dx-pill">Psychiatrist referral</span>
+          </div>
+          <ul class="dx-learnings">
+            <li><strong>Hopelessness</strong> is the single best predictor of suicide risk — flag it in every depressed client</li>
+            <li>Active suicide plan → initiate <strong>5150 (involuntary hospitalization)</strong>; safety contracts are insufficient alone</li>
+            <li>Other high-risk markers: prior attempt, giving away possessions, changing a will, access to lethal means</li>
+            <li>Children with MDD present with <strong>irritability, somatic complaints</strong> (stomachaches, headaches) rather than verbalizing sadness</li>
+            <li>Elderly depression: <strong>CBT + Reminiscence Therapy</strong> (life review) is evidence-based; EMDR not indicated without trauma</li>
+            <li>Client taking non-prescribed antidepressants → <strong>immediate psychiatric evaluation</strong></li>
+            <li>Share test results in <strong>plain language</strong>; raw scores or jargon alone is unethical</li>
+            <li>Psychodynamic approach: explore <strong>unconscious roots</strong> and meaning of depression</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Anxiety</div>
+          <div class="dx-pills">
+            <span class="dx-pill">CBT</span>
+            <span class="dx-pill">Exposure therapy</span>
+            <span class="dx-pill">ERP (OCD subtype)</span>
+            <span class="dx-pill">Rapport &amp; safety first</span>
+            <span class="dx-pill">Social skills training</span>
+            <span class="dx-pill">Family systems approach</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>GAD = excessive worry across <strong>multiple domains</strong> for ≥ 6 months; Adjustment disorder = reaction to a <em>specific</em> stressor</li>
+            <li>For phobias: CBT with exposure is first-line; MFTs are generally trained and qualified to treat anxiety disorders</li>
+            <li>With anxious children: <strong>establish rapport and safety</strong> before any technique; work on social skills alongside anxiety</li>
+            <li>Family systems lens: anxiety often reflects <strong>family dynamic</strong> — address structure, not just the symptomatic individual</li>
+            <li>Separation anxiety + recent trauma: focus on <strong>trauma recovery first</strong>, then family/systemic work</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Adjustment Disorder</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Identifiable stressor</span>
+            <span class="dx-pill">Within 3 months of onset</span>
+            <span class="dx-pill">Subthreshold severity</span>
+            <span class="dx-pill">Short-term focus</span>
+            <span class="dx-pill">Specifiers: depressed / anxious / mixed</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Diagnosis requires a <strong>clear psychosocial stressor</strong> and symptoms beginning within <strong>3 months</strong> of its onset</li>
+            <li>Symptoms are clinically significant but do <strong>not</strong> meet full criteria for another disorder (e.g., MDD, PTSD)</li>
+            <li>Common on exam: new job loss, divorce, medical diagnosis, bereavement → short-term supportive + CBT</li>
+            <li>Specifiers matter: <em>with depressed mood, with anxiety, with mixed emotional features, with disturbance of conduct</em></li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Bipolar Disorder</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Mood stabilizers</span>
+            <span class="dx-pill">Psychiatrist collaboration</span>
+            <span class="dx-pill">5150 for manic crisis</span>
+            <span class="dx-pill">Family psychoeducation</span>
+            <span class="dx-pill">Bipolar I vs II</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Bipolar I: full manic episode required; Bipolar II: hypomania + major depressive episodes (no full mania)</li>
+            <li>Manic episode with poor judgment/impulse control → <strong>hospitalization</strong> is the priority</li>
+            <li>Suicidal with active plan + Bipolar I = <strong>5150 immediately</strong>; medication + safety planning is insufficient</li>
+            <li>Client resists psychiatrist referral → <strong>explain the rationale clearly</strong> (medication management, not replacement of therapy)</li>
+            <li>Family members: psychoeducation on the disorder, cycles, and how to support without enabling</li>
+            <li>When in session and client acts out: call psychiatrist <strong>in the client's presence</strong> so both can hear the response</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">OCD</div>
+          <div class="dx-pills">
+            <span class="dx-pill">ERP (gold standard)</span>
+            <span class="dx-pill">Medication (SSRIs)</span>
+            <span class="dx-pill">Psychoeducation</span>
+            <span class="dx-pill">Ego-dystonic</span>
+            <span class="dx-pill">OCD + Anorexia comorbidity</span>
+          </div>
+          <ul class="dx-learnings">
+            <li><strong>Exposure and Response Prevention (ERP)</strong> is the first-line treatment; combined with SSRIs for moderate–severe</li>
+            <li>OCD is <strong>ego-dystonic</strong>: obsessions feel intrusive and unwanted (vs. OCPD which is ego-syntonic)</li>
+            <li>Over <strong>50% of anorexia nervosa</strong> clients meet OCD or social phobia criteria at some point — always screen</li>
+            <li>Psychoeducation for client <em>and family</em> is an important adjunct — helps reduce accommodation behaviors</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ── PERSONALITY ── -->
+      <div class="dx-group">
+        <div class="dx-group-header">Personality Disorders</div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Borderline Personality Disorder (BPD)</div>
+          <div class="dx-pills">
+            <span class="dx-pill">DBT (Linehan)</span>
+            <span class="dx-pill">Mindfulness</span>
+            <span class="dx-pill">Interpersonal effectiveness</span>
+            <span class="dx-pill">Distress tolerance</span>
+            <span class="dx-pill">Emotion regulation</span>
+            <span class="dx-pill">Splitting</span>
+          </div>
+          <ul class="dx-learnings">
+            <li><strong>Dialectical Behavior Therapy (DBT)</strong> by Marsha Linehan is the evidence-based treatment specifically designed for BPD</li>
+            <li>DBT's four skill modules: <strong>mindfulness, interpersonal effectiveness, distress tolerance, emotion regulation</strong></li>
+            <li>When client presents with extreme anger: <strong>let the client express emotions first</strong> before any redirection or technique</li>
+            <li>Splitting ("you're the best therapist ever" → "you're terrible") is a hallmark — remain consistent and non-reactive</li>
+            <li>Hospitalizations are common — always review discharge papers including toxicology reports on return to therapy</li>
+            <li>Therapeutic relationship with BPD clients is often ambivalent and confusing — this is diagnostic, not personal</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Schizoid Personality Disorder</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Social detachment</span>
+            <span class="dx-pill">Restricted affect</span>
+            <span class="dx-pill">No desire for closeness</span>
+            <span class="dx-pill">Cluster A</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Pattern of <strong>detachment from social relationships</strong> and restricted range of emotional expression</li>
+            <li>Key distinction: person <em>neither desires nor enjoys</em> close relationships — this is not social anxiety (which involves wanting connection)</li>
+            <li>No close friends, solitary activities, indifferent to praise or criticism</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Histrionic Personality Disorder</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Attention-seeking</span>
+            <span class="dx-pill">Dramatic / exaggerated emotions</span>
+            <span class="dx-pill">Approval-seeking</span>
+            <span class="dx-pill">Cluster B</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Constant seeking of <strong>approval and attention</strong>; overly reactive and dramatically expressed emotions</li>
+            <li>Relationships perceived as more intimate than they are; uses physical appearance to draw attention</li>
+            <li>Distinguished from BPD by the <em>absence</em> of self-harm, identity disturbance, and abandonment fears</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">OCPD</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Perfectionism</span>
+            <span class="dx-pill">Inflexibility</span>
+            <span class="dx-pill">Need for control</span>
+            <span class="dx-pill">Ego-syntonic</span>
+            <span class="dx-pill">Cluster C</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>OCPD = <strong>persistent perfectionism, inflexibility, and need for control</strong> — the person sees these traits as reasonable</li>
+            <li><strong>Ego-syntonic</strong>: the behaviors feel right and consistent with self (unlike OCD's intrusive, ego-dystonic obsessions)</li>
+            <li>Preoccupied with rules, orderliness, and schedules to the point that tasks are never finished</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Paranoid Personality Disorder</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Pervasive distrust</span>
+            <span class="dx-pill">Suspicion without evidence</span>
+            <span class="dx-pill">Misreads neutral actions</span>
+            <span class="dx-pill">Cluster A</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Pervasive <strong>distrust and suspicion</strong> of others — reads neutral or benign actions as threatening or demeaning</li>
+            <li>Key exam clue: the word <em>"suspicion"</em> or <em>"distrust"</em> points strongly to paranoid PD (vs. schizoid = detachment)</li>
+            <li>Different from paranoid schizophrenia: no psychotic episodes, hallucinations, or disorganized thought</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ── SEXUAL ── -->
+      <div class="dx-group">
+        <div class="dx-group-header">Sexual Disorders</div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Sexual Disorders &amp; Sexual Concerns</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Consent &amp; trigger communication</span>
+            <span class="dx-pill">Sexual dysfunction</span>
+            <span class="dx-pill">Medical exam first</span>
+            <span class="dx-pill">Age-appropriate psychoeducation</span>
+            <span class="dx-pill">Paraphilias</span>
+            <span class="dx-pill">Substance use → sexual dysfunction</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Post-assault couples: establish <strong>explicit consent + trigger communication</strong> before resuming intimacy — failure to do so risks re-traumatization</li>
+            <li><strong>Alcohol and drug use</strong> are a primary cause of sexual dysfunction — always assess substance use in sexual complaints</li>
+            <li>Children showing sexual behaviors: assess for sexual abuse; look for <strong>age-inappropriate sexual knowledge</strong>, withdrawal, regression</li>
+            <li>Emotionally Focused Therapy (EFT) integrates <strong>attachment theory</strong>: insecure attachment → anxiety/avoidance patterns in intimacy</li>
+            <li>Age-appropriate psychoeducation: parents asking about children's sexual curiosity = normalize developmentally typical exploration</li>
+            <li>Sex offender treatment: highly structured; therapist must balance therapeutic relationship with community safety</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ── ADDICTION ── -->
+      <div class="dx-group">
+        <div class="dx-group-header">Addiction &amp; Substance Use</div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Eating Disorders</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Anorexia vs. Bulimia</span>
+            <span class="dx-pill">Binge-Eating Disorder</span>
+            <span class="dx-pill">Narrative therapy (externalizing)</span>
+            <span class="dx-pill">OCD / anxiety comorbidity</span>
+            <span class="dx-pill">Denial → high dropout risk</span>
+            <span class="dx-pill">Weight restoration priority</span>
+          </div>
+          <ul class="dx-learnings">
+            <li><strong>Bulimia</strong> = binge + recurrent compensatory behaviors (purging, fasting, excessive exercise); <strong>Binge-Eating Disorder</strong> = binge without compensatory behaviors</li>
+            <li>Primary clue for bulimia vs. anorexia: client is <em>not severely underweight</em> but has loss of control over eating and compensatory behaviors</li>
+            <li>Over 50% of anorexia clients also meet criteria for OCD or social phobia — always screen for anxiety disorders</li>
+            <li>Narrative therapy technique: <em>"How does the eating disorder affect you?"</em> = <strong>externalizing</strong> — the disorder is separate from the person</li>
+            <li>Denial and lack of insight = highest dropout risk; motivational interviewing and alliance-building are essential</li>
+            <li>Medical stabilization and <strong>weight restoration</strong> must be addressed before purely psychological work in severe anorexia</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Alcohol Use Disorder</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Motivational Interviewing (MI)</span>
+            <span class="dx-pill">Al-Anon for family</span>
+            <span class="dx-pill">Generational patterns / codependency</span>
+            <span class="dx-pill">Direct confrontation</span>
+            <span class="dx-pill">Withdrawal risk</span>
+          </div>
+          <ul class="dx-learnings">
+            <li><strong>Motivational Interviewing (MI)</strong> is the client-centered approach for building readiness and commitment to change in ambivalent clients</li>
+            <li>When alcohol use is suspected but not confirmed: <strong>directly confront</strong> the client about the suspected use — avoidance is collusion</li>
+            <li>Family sessions: address <strong>generational patterns of alcoholism and codependency</strong> — systemic enabling must be named</li>
+            <li><strong>Al-Anon</strong>: 12-step support group for family members and friends of people with alcohol problems</li>
+            <li>Court-mandated clients: address the <strong>alcohol use directly and therapeutically</strong>; mandated context doesn't mean only compliance is the goal</li>
+            <li>Elderly depression + alcohol use: treat both concurrently; address grief/loss and coordinate with the primary care physician</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Heroin / Opioids</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Buprenorphine (MAT)</span>
+            <span class="dx-pill">AB 816 — minors ≥ 16</span>
+            <span class="dx-pill">Nar-Anon for family</span>
+            <span class="dx-pill">Flu-like withdrawal</span>
+            <span class="dx-pill">Therapeutic alliance = lifeline</span>
+            <span class="dx-pill">Grief / loss often underlying</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Morphine / opioid withdrawal = <strong>flu-like symptoms</strong>: nausea, vomiting, diarrhea, muscle cramps, chills, runny nose, insomnia</li>
+            <li><strong>AB 816</strong> (effective Jan 1, 2024): minors <strong>16 and older</strong> may consent to buprenorphine-based MAT outside a narcotic treatment program</li>
+            <li>Buprenorphine is a <strong>medication-assisted treatment (MAT)</strong> — do not discourage it; it is evidence-based and saves lives</li>
+            <li>The <strong>therapeutic alliance</strong> is often the primary support system — identify other people/services as protective factors</li>
+            <li>When a client is court-mandated for anger management but has opioid history: <strong>assess grief and loss first</strong> — substance use often masks underlying loss</li>
+            <li><strong>Nar-Anon</strong>: 12-step support for family/friends of people using drugs (parallel to Al-Anon)</li>
+          </ul>
+        </div>
+
+        <div class="dx-diagnosis">
+          <div class="dx-diagnosis-name">Stimulants (Cocaine, Meth, etc.)</div>
+          <div class="dx-pills">
+            <span class="dx-pill">Intoxication signs</span>
+            <span class="dx-pill">Nar-Anon for family</span>
+            <span class="dx-pill">Conduct disorder prerequisite (ASPD)</span>
+            <span class="dx-pill">Shared family goals first</span>
+            <span class="dx-pill">Antisocial comorbidity</span>
+          </div>
+          <ul class="dx-learnings">
+            <li>Stimulant intoxication signs: <strong>dilated pupils, perspiration, agitation, confusion, increased talkativeness</strong></li>
+            <li><strong>Nar-Anon</strong> is to drug use what Al-Anon is to alcohol — support for families of drug-using individuals</li>
+            <li>ASPD diagnosis requires evidence of <strong>Conduct Disorder before age 15</strong> — look for a history of early misconduct</li>
+            <li>When beginning family therapy with stimulant use: <strong>first define shared treatment goals</strong> with all family members before intervening</li>
+            <li>Stimulant use + aggression + extensive misconduct history → screen for <strong>Antisocial Personality Disorder</strong></li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- end .dx-body -->
   </section>
 
 </div>
@@ -2949,6 +3391,10 @@ function resetLookup() {
   document.getElementById('lookup-result').style.display = 'none';
   document.getElementById('lookup-result-2').style.display = 'none';
   document.getElementById('lookup-dual-header').style.display = 'none';
+}
+
+function showDiagnosisTerms() {
+  showScreen('screen-diagnosis-terms');
 }
 </script>
 </body>
