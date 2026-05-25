@@ -2879,15 +2879,19 @@ function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, qu
     el.className = 'mode-badge ' + (verbatim ? 'verbatim' : 'stem-only');
   }
 
-  // ── Helper: answer display text (extracted from paste if verbatim, else letter only) ──
-  function answerDisplay(letter) {
-    const extracted = verbatim ? extractChoiceText(rawInput, letter) : null;
-    return extracted || ('Answer ' + letter);
+  // ── Helper: answer display text ──────────────────────────────────────────
+  // Priority: extracted from verbatim paste → stored answerText → letter fallback
+  function answerDisplay(match) {
+    if (verbatim) {
+      const extracted = extractChoiceText(rawInput, match.answer);
+      if (extracted) return extracted;
+    }
+    return match.answerText || ('Answer ' + match.answer);
   }
 
   // ── Populate primary card ─────────────────────────────────────────────────
   document.getElementById('result-letter').textContent = bestMatch.answer;
-  document.getElementById('result-answer-text').textContent = answerDisplay(bestMatch.answer);
+  document.getElementById('result-answer-text').textContent = answerDisplay(bestMatch);
   document.getElementById('result-category').textContent = bestMatch.category;
   document.getElementById('result-matched-q').textContent = bestMatch.q;
   document.getElementById('result-rationale').textContent = bestMatch.rationale;
@@ -2923,7 +2927,7 @@ function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, qu
     card2.style.display = 'block';
 
     document.getElementById('result-letter-2').textContent = secondMatch.answer;
-    document.getElementById('result-answer-text-2').textContent = answerDisplay(secondMatch.answer);
+    document.getElementById('result-answer-text-2').textContent = answerDisplay(secondMatch);
     document.getElementById('result-category-2').textContent = secondMatch.category;
     document.getElementById('result-matched-q-2').textContent = secondMatch.q;
     document.getElementById('result-rationale-2').textContent = secondMatch.rationale;
