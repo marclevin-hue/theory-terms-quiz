@@ -2854,6 +2854,8 @@ function lookupQuestion() {
 }
 
 function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, queryTokens) {
+  // 0.45 threshold: true matches score ~0.98; false positives score 0.28–0.40
+  // Below 0.45 means we cannot confidently identify the question — show two candidates
   const isDual = rawScore < 0.45;
 
   // ── Helper: compute term overlap string ──────────────────────────────────
@@ -2881,15 +2883,15 @@ function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, qu
 
   // ── Confidence dots (single mode only) ───────────────────────────────────
   const confRow = document.querySelector('.conf-row');
-  if (confRow) confRow.style.display = isDual ? 'none' : '';
+  if (confRow) confRow.style.display = (isDual && secondMatch) ? 'none' : '';
 
-  if (!isDual) {
+  if (!isDual || !secondMatch) {
     const dotsEl = document.getElementById('conf-dots');
     dotsEl.innerHTML = '';
-    const colorClass = conf >= 4 ? 'high' : conf <= 2 ? 'low' : '';
+    const colorClass = conf >= 4 ? ' high' : conf <= 2 ? ' low' : '';
     for (let i = 1; i <= 5; i++) {
       const dot = document.createElement('div');
-      dot.className = 'conf-dot' + (i <= conf ? ' filled ' + colorClass : '');
+      dot.className = 'conf-dot' + (i <= conf ? ' filled' + colorClass : '');
       dotsEl.appendChild(dot);
     }
     const labels = ['','Very Low','Low','Moderate','High','Very High'];
