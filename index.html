@@ -2754,9 +2754,14 @@ function submitPassword() {
 
 // ── Lookup Functions ──────────────────────────────────────────────────────────
 
+function hasAnswerChoices(raw) {
+  return /select\s+one/i.test(raw) || /[''']?[ABCD]\.\s/m.test(raw);
+}
+
 function lookupQuestion() {
   const input = document.getElementById('lookup-textarea').value.trim();
   if (!input) return;
+  const verbatim = hasAnswerChoices(input);
 
   // Strip answer choices so pasted exam questions match correctly
   const cleaned = preprocessQuery(input);
