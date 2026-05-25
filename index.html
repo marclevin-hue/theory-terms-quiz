@@ -1048,6 +1048,41 @@
       border-left: 3px solid var(--border);
     }
 
+    .mode-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 3px 9px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+    .mode-badge.verbatim {
+      background: rgba(80,180,100,0.15);
+      color: #6dbb80;
+      border: 1px solid rgba(80,180,100,0.25);
+    }
+    .mode-badge.stem-only {
+      background: rgba(212,145,58,0.15);
+      color: var(--accent-lt);
+      border: 1px solid rgba(212,145,58,0.25);
+    }
+    .lookup-term-overlap {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: 0 0 14px;
+      padding: 0;
+    }
+    .dual-header {
+      font-size: 0.83rem;
+      color: var(--muted);
+      font-style: italic;
+      margin: 0 0 14px;
+      line-height: 1.5;
+    }
+    .lookup-result-card.dim {
+      opacity: 0.75;
+    }
+
     .lookup-warn {
       background: rgba(194,74,65,0.1);
       border: 1px solid rgba(194,74,65,0.3);
@@ -1322,7 +1357,10 @@
                 <span class="lookup-answer-text" id="result-answer-text">—</span>
               </div>
             </div>
-            <span class="lookup-cat-badge" id="result-category">—</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="lookup-cat-badge" id="result-category">—</span>
+              <span class="mode-badge" id="result-mode-badge">—</span>
+            </div>
           </div>
 
           <div class="conf-row">
@@ -1333,6 +1371,8 @@
             </div>
           </div>
 
+          <p class="lookup-term-overlap" id="result-term-overlap"></p>
+
           <p class="lookup-rationale-label">Matched question</p>
           <p class="lookup-matched-q" id="result-matched-q">—</p>
 
@@ -1342,6 +1382,31 @@
           <div id="lookup-warn" class="lookup-warn" style="display:none;">
             ⚠️ This question was not found in our database. The answer shown is from the closest matching question — verify before relying on it.
           </div>
+        </div>
+
+        <div id="lookup-dual-header" class="dual-header" style="display:none;">
+          Couldn't find a confident match — here are the 2 closest questions in the database:
+        </div>
+
+        <div id="lookup-result-2" class="lookup-result-card dim" style="display:none; margin-top:12px;">
+          <div class="lookup-result-header">
+            <div class="lookup-answer-badge">
+              <div class="lookup-answer-letter" id="result-letter-2">A</div>
+              <div class="lookup-answer-meta">
+                <span class="lookup-answer-label">2nd closest</span>
+                <span class="lookup-answer-text" id="result-answer-text-2">—</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="lookup-cat-badge" id="result-category-2">—</span>
+              <span class="mode-badge" id="result-mode-badge-2">—</span>
+            </div>
+          </div>
+          <p class="lookup-term-overlap" id="result-term-overlap-2"></p>
+          <p class="lookup-rationale-label">Matched question</p>
+          <p class="lookup-matched-q" id="result-matched-q-2">—</p>
+          <p class="lookup-rationale-label">Rationale</p>
+          <p class="lookup-rationale-text" id="result-rationale-2">—</p>
         </div>
 
         <button class="lookup-try-again" onclick="resetLookup()">← Try Another Question</button>
