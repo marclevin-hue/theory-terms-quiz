@@ -2768,22 +2768,24 @@ function lookupQuestion() {
   const queryTokens = new Set(tokenize(cleaned));
   if (queryTokens.size === 0) return;
 
-  let bestScore = -1;
-  let bestMatch = null;
+  let bestScore = -1, secondScore = -1;
+  let bestMatch = null, secondMatch = null;
 
   for (const entry of QUESTION_BANK) {
     const entryTokens = new Set(tokenize(entry.q));
     const sim = cosineSimilarity(queryTokens, entryTokens);
     if (sim > bestScore) {
-      bestScore = sim;
-      bestMatch = entry;
+      secondScore = bestScore; secondMatch = bestMatch;
+      bestScore = sim; bestMatch = entry;
+    } else if (sim > secondScore) {
+      secondScore = sim; secondMatch = entry;
     }
   }
 
   if (!bestMatch) return;
 
   const conf = scoreConfidence(bestScore);
-  renderLookupResult(bestMatch, conf, bestScore);
+  renderLookupResult(bestMatch, secondMatch, conf, bestScore, verbatim, queryTokens);
 }
 
 function renderLookupResult(match, conf, rawScore) {
