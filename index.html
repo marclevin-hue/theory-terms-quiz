@@ -2823,6 +2823,13 @@ function hasAnswerChoices(raw) {
   return /select\s+one/i.test(raw) || /[''']?[ABCD]\.\s/m.test(raw);
 }
 
+function extractChoiceText(raw, letter) {
+  // Matches: optional curly/straight quote + letter + period + whitespace + text to end of line
+  const pattern = new RegExp("['''‘’]?" + letter + "\\.[ \\t]+([^\\n]+)", 'im');
+  const m = raw.match(pattern);
+  return m ? m[1].trim() : null;
+}
+
 function lookupQuestion() {
   const input = document.getElementById('lookup-textarea').value.trim();
   if (!input) return;
@@ -2850,10 +2857,10 @@ function lookupQuestion() {
   if (!bestMatch) return;
 
   const conf = scoreConfidence(bestScore);
-  renderLookupResult(bestMatch, secondMatch, conf, bestScore, verbatim, queryTokens);
+  renderLookupResult(bestMatch, secondMatch, conf, bestScore, verbatim, queryTokens, input);
 }
 
-function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, queryTokens) {
+function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, queryTokens, rawInput) {
   // 0.45 threshold: true matches score ~0.98; false positives score 0.28–0.40
   // Below 0.45 means we cannot confidently identify the question — show two candidates
   const isDual = rawScore < 0.45;
@@ -2872,9 +2879,15 @@ function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, qu
     el.className = 'mode-badge ' + (verbatim ? 'verbatim' : 'stem-only');
   }
 
+  // ── Helper: answer display text (extracted from paste if verbatim, else letter only) ──
+  function answerDisplay(letter) {
+    const extracted = verbatim ? extractChoiceText(rawInput, letter) : null;
+    return extracted || ('Answer ' + letter);
+  }
+
   // ── Populate primary card ─────────────────────────────────────────────────
   document.getElementById('result-letter').textContent = bestMatch.answer;
-  document.getElementById('result-answer-text').textContent = 'Answer ' + bestMatch.answer;
+  document.getElementById('result-answer-text').textContent = answerDisplay(bestMatch.answer);
   document.getElementById('result-category').textContent = bestMatch.category;
   document.getElementById('result-matched-q').textContent = bestMatch.q;
   document.getElementById('result-rationale').textContent = bestMatch.rationale;
@@ -2910,7 +2923,7 @@ function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, qu
     card2.style.display = 'block';
 
     document.getElementById('result-letter-2').textContent = secondMatch.answer;
-    document.getElementById('result-answer-text-2').textContent = 'Answer ' + secondMatch.answer;
+    document.getElementById('result-answer-text-2').textContent = answerDisplay(secondMatch.answer);
     document.getElementById('result-category-2').textContent = secondMatch.category;
     document.getElementById('result-matched-q-2').textContent = secondMatch.q;
     document.getElementById('result-rationale-2').textContent = secondMatch.rationale;
