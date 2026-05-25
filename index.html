@@ -2853,30 +2853,73 @@ function lookupQuestion() {
   renderLookupResult(bestMatch, secondMatch, conf, bestScore, verbatim, queryTokens);
 }
 
-function renderLookupResult(match, conf, rawScore) {
-  document.getElementById('result-letter').textContent = match.answer;
-  document.getElementById('result-answer-text').textContent = 'Answer ' + match.answer;
-  document.getElementById('result-category').textContent = match.category;
-  document.getElementById('result-matched-q').textContent = match.q;
-  document.getElementById('result-rationale').textContent = match.rationale;
+function renderLookupResult(bestMatch, secondMatch, conf, rawScore, verbatim, queryTokens) {
+  const isDual = rawScore < 0.45;
 
-  // Confidence dots
-  const dotsEl = document.getElementById('conf-dots');
-  dotsEl.innerHTML = '';
-  const colorClass = conf >= 4 ? 'high' : conf <= 2 ? 'low' : '';
-  for (let i = 1; i <= 5; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'conf-dot' + (i <= conf ? ' filled ' + colorClass : '');
-    dotsEl.appendChild(dot);
+  // ── Helper: compute term overlap string ──────────────────────────────────
+  function overlapText(match) {
+    const entryTokens = new Set(tokenize(match.q));
+    const x = [...queryTokens].filter(t => entryTokens.has(t)).length;
+    const y = queryTokens.size;
+    return 'Matched ' + x + ' of ' + y + ' key terms';
   }
-  const labels = ['','Very Low','Low','Moderate','High','Very High'];
-  document.getElementById('conf-score-text').textContent = labels[conf] + ' (' + conf + '/5)';
 
-  // Warning: show if low confidence OR if raw similarity is below "exact match" threshold
-  const warn = document.getElementById('lookup-warn');
-  warn.style.display = (conf <= 2 || rawScore < 0.45) ? 'block' : 'none';
+  // ── Helper: set mode badge ────────────────────────────────────────────────
+  function setModeBadge(el) {
+    el.textContent = verbatim ? 'Verbatim paste' : 'Stem only';
+    el.className = 'mode-badge ' + (verbatim ? 'verbatim' : 'stem-only');
+  }
 
-  // Show result, hide input area
+  // ── Populate primary card ─────────────────────────────────────────────────
+  document.getElementById('result-letter').textContent = bestMatch.answer;
+  document.getElementById('result-answer-text').textContent = 'Answer ' + bestMatch.answer;
+  document.getElementById('result-category').textContent = bestMatch.category;
+  document.getElementById('result-matched-q').textContent = bestMatch.q;
+  document.getElementById('result-rationale').textContent = bestMatch.rationale;
+  document.getElementById('result-term-overlap').textContent = overlapText(bestMatch);
+  setModeBadge(document.getElementById('result-mode-badge'));
+
+  // ── Confidence dots (single mode only) ───────────────────────────────────
+  const confRow = document.querySelector('.conf-row');
+  if (confRow) confRow.style.display = isDual ? 'none' : '';
+
+  if (!isDual) {
+    const dotsEl = document.getElementById('conf-dots');
+    dotsEl.innerHTML = '';
+    const colorClass = conf >= 4 ? 'high' : conf <= 2 ? 'low' : '';
+    for (let i = 1; i <= 5; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'conf-dot' + (i <= conf ? ' filled ' + colorClass : '');
+      dotsEl.appendChild(dot);
+    }
+    const labels = ['','Very Low','Low','Moderate','High','Very High'];
+    document.getElementById('conf-score-text').textContent = labels[conf] + ' (' + conf + '/5)';
+  }
+
+  // ── Warning banner: always hidden (threshold mutually exclusive) ──────────
+  document.getElementById('lookup-warn').style.display = 'none';
+
+  // ── Dual-card path ────────────────────────────────────────────────────────
+  const dualHeader = document.getElementById('lookup-dual-header');
+  const card2 = document.getElementById('lookup-result-2');
+
+  if (isDual && secondMatch) {
+    dualHeader.style.display = 'block';
+    card2.style.display = 'block';
+
+    document.getElementById('result-letter-2').textContent = secondMatch.answer;
+    document.getElementById('result-answer-text-2').textContent = 'Answer ' + secondMatch.answer;
+    document.getElementById('result-category-2').textContent = secondMatch.category;
+    document.getElementById('result-matched-q-2').textContent = secondMatch.q;
+    document.getElementById('result-rationale-2').textContent = secondMatch.rationale;
+    document.getElementById('result-term-overlap-2').textContent = overlapText(secondMatch);
+    setModeBadge(document.getElementById('result-mode-badge-2'));
+  } else {
+    dualHeader.style.display = 'none';
+    card2.style.display = 'none';
+  }
+
+  // ── Show result, hide input ───────────────────────────────────────────────
   document.getElementById('lookup-input-area').style.display = 'none';
   document.getElementById('lookup-result').style.display = 'block';
 }
@@ -2885,6 +2928,8 @@ function resetLookup() {
   document.getElementById('lookup-textarea').value = '';
   document.getElementById('lookup-input-area').style.display = 'block';
   document.getElementById('lookup-result').style.display = 'none';
+  document.getElementById('lookup-result-2').style.display = 'none';
+  document.getElementById('lookup-dual-header').style.display = 'none';
 }
 </script>
 </body>
