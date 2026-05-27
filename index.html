@@ -1883,6 +1883,27 @@
     </div><!-- end .dx-body -->
   </section>
 
+  <!-- ════════════ EXAM FLASHCARD SELECTOR ════════════ -->
+  <section id="screen-qfc-select" class="screen">
+    <nav class="quiz-nav">
+      <button class="quiz-nav-home" onclick="goHome()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 7l6-6 6 6"/><path d="M2.5 5.5V13h3.5V9h2v4h3.5V5.5"/>
+        </svg>
+        Home
+      </button>
+      <span class="quiz-nav-mode">Exam Flashcards</span>
+    </nav>
+    <div class="qfc-select-body">
+      <p class="home-eyebrow">Exam Flashcards</p>
+      <h1 class="home-title">Choose a <em>Domain</em></h1>
+      <p class="home-sub">Choose a domain to drill, or mix all questions together</p>
+      <div class="mode-grid" id="qfc-domain-grid">
+        <!-- Populated by renderQFCSelect() -->
+      </div>
+    </div>
+  </section>
+
 </div>
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────────────
