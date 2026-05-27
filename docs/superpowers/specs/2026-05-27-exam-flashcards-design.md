@@ -1,5 +1,5 @@
 # Exam Flashcards Module — Design Spec
-**Date:** 2026-05-27
+**Date:** 2026-05-27 (rev 2 — post spec-review)
 **Project:** theory-terms-quiz (single-file static HTML/CSS/JS app)
 **Status:** Approved for implementation
 
@@ -14,27 +14,29 @@ A new "Exam Flashcards" mode that converts the 924-entry QUESTION_BANK into conc
 ## Goals
 
 - Give the user a concept-first study mode derived from AATBS exam questions
-- Reuse the existing flashcard UI (flip interaction, grading, resurfacing) with zero changes to existing logic
-- Allow filtering by the 6 quiz domains or mixing all cards
-- Produce a human-reviewable card deck before shipping, so the user can curate quality
+- Reuse the existing `#screen-quiz` HTML and most FC engine code
+- Add a missed-card resurface loop (new behavior — see Grading section)
+- Allow filtering by the 6 quiz domains, a Practice Exams tile, or all cards
+- Produce a human-reviewable card deck before shipping so the user can curate quality
 
 ---
 
 ## Architecture
 
-### Option Selected: Extend existing FC engine (Option A from brainstorm)
+### Approach: Extend existing FC engine
 
-The existing `#screen-quiz`, flip logic, grade buttons, and missed-card resurfacing loop are reused unchanged. A branch on `activeMode === 'qfc'` in the card renderer switches between theory-term and exam-concept card templates.
+The existing `#screen-quiz` HTML is reused. `fcRenderCard()` gains a branch on `activeMode === 'qfc'` to bind concept card fields. The grading flow gains a new resurface loop (QFC-only). Everything else in the FC mode is unchanged.
 
 ### New Pieces
 
 | Piece | Description |
 |-------|-------------|
-| Home tile | Full-width tile "Exam Flashcards" on `#screen-home`, same style as Question Lookup tile |
-| `#screen-qfc-select` | Category selector screen with 7 tiles (6 domains + "Mix All"), each showing card count |
-| `startQFC(category)` | Filters `EXAM_CARDS` by category, shuffles, sets `activeMode = 'qfc'`, populates `fcDeck`, calls `showScreen('screen-quiz')` |
-| `EXAM_CARDS` array | New data structure embedded in the HTML, produced by the preprocessing pipeline |
-| Card renderer branch | `activeMode === 'qfc'` check in existing flip/render functions to show concept title / concept explanation instead of term name / theory |
+| Home tile | Full-width tile "Exam Flashcards" on `#screen-home` — same `grid-column: 1 / -1` row style as Question Lookup tile |
+| `#screen-qfc-select` | Category selector: 8 tiles (6 domains + "Practice Exams" + "Mix All"), each showing live card count computed from `EXAM_CARDS` at render time |
+| `startQFC(category)` | Filters `EXAM_CARDS` by category (or takes all), shuffles, sets `activeMode = 'qfc'`, populates `fcDeck`, resets `fcFlipped = false`, `fcIndex = 0`, `fcHistory = [0]`, `fcScores = []`, `qfcRight = 0`, `qfcWrong = 0`, `qfcOriginalLength = fcDeck.length`, updates `fc-prog-total`, calls `showScreen('screen-quiz')` |
+| `EXAM_CARDS` array | New data structure embedded in `index.html`, produced by preprocessing pipeline |
+| `fcRenderCard()` branch | When `activeMode === 'qfc'`: binds `card.concept_title` → `#fc-term`, `card.concept_explanation` → `#fc-theory`; updates face labels and nav mode label dynamically |
+| Resurface loop | Added to `fcScore()` for QFC mode only: wrong/almost answers are appended to the end of `fcDeck` and re-encountered until scored correct |
 
 ### Data Flow
 
@@ -46,7 +48,12 @@ User picks a domain (or Mix All)
   → filter EXAM_CARDS, shuffle
   → set activeMode = 'qfc', populate fcDeck
   → showScreen('screen-quiz')
-Existing flip/grade/resurface logic runs unchanged
+fcRenderCard() detects activeMode === 'qfc', binds concept fields
+User flips, grades → fcScore()
+  → if 'wrong'/'almost': append card copy to end of fcDeck (resurface loop)
+  → if 'right': advance normally
+Session ends when fcIndex >= fcDeck.length - 1 with no pending resurfaces
+  → endSession() shows summary with "Exam Flashcards" badge
 ```
 
 ---
@@ -54,15 +61,19 @@ Existing flip/grade/resurface logic runs unchanged
 ## Card Format
 
 ### Side A (Front)
-- **Domain label** — small uppercase muted text (e.g., "Clinical Evaluation")
-- **Concept title** — large serif text, same visual weight as theory term cards (e.g., "Signs of Child Abuse")
+- **Face label** — dynamically set to `"Concept"` when `activeMode === 'qfc'` (replaces `"Term"`)
+- **Concept title** — `card.concept_title` → `#fc-term` (e.g., *"Signs of Child Abuse"*)
 
 ### Side B (Back)
-- **Key learning** — 1–3 sentences explaining the principle or clinical rule distilled from the correct answer + rationale (e.g., "When a child presents with clinginess, fearfulness, and social withdrawal, assess for child abuse before pursuing diagnosis or referral.")
-- No raw answer choices shown — the back teaches the concept, not the answer letter
+- **Face label** — dynamically set to `"Key Learning"` when `activeMode === 'qfc'` (replaces `"Theory"`)
+- **Key learning** — `card.concept_explanation` → `#fc-theory` — 1–3 sentences explaining the clinical rule or principle
+
+### Nav / Labels
+- `quiz-nav-mode` span text: set to `"Exam Flashcards"` when `activeMode === 'qfc'`
+- Target using `document.querySelector('#screen-quiz .quiz-nav-mode')` — the same class appears in `#screen-mc`, so a broad `querySelector` would hit the wrong element
 
 ### Fallback
-Questions that don't distill cleanly into a reusable, standalone concept are excluded (`keep: false`). Expected yield: ~500–600 cards from 924 source entries.
+Questions that don't distill cleanly into a reusable standalone concept are excluded (`keep: false`) during preprocessing. Expected yield: ~500–600 cards from 924 source entries.
 
 ---
 
@@ -72,22 +83,68 @@ Questions that don't distill cleanly into a reusable, standalone concept are exc
 const EXAM_CARDS = [
   {
     id: 1,
-    category: "Clinical Evaluation",       // matches the 6 AATBS quiz domains
+    category: "Clinical Evaluation",   // exact string from QUESTION_BANK (see below)
     concept_title: "Signs of Child Abuse",
     concept_explanation: "When a child presents with clinginess, fearfulness, and social withdrawal, prioritize assessing for child abuse before pursuing a diagnosis or referral.",
-    source_q: "A mother brings in her 6-year-old daughter..."  // kept for traceability, not shown on card
+    source_q: "A mother brings in her 6-year-old daughter..."  // for traceability; not shown on card
   },
   // ...
 ];
 ```
 
-### Domain Categories (exact strings)
-1. `"Clinical Evaluation"`
-2. `"Treatment"`
-3. `"Law and Ethics"`
-4. `"Case Conceptualization"`
-5. `"Managing Crisis Situations"`
-6. `"Developing a Diagnostic Impression"`
+### Domain Category Strings — Exact Values from QUESTION_BANK
+
+| Tile label | `category` value in EXAM_CARDS | Source count |
+|---|---|---|
+| Clinical Evaluation | `"Clinical Evaluation"` | 92 |
+| Treatment | `"Treatment"` | 199 |
+| Law & Ethics | `"Law & Ethics"` | 132 |
+| Case Conceptualization | `"Case Conceptualization"` | 79 |
+| Managing Crisis | `"Managing Crisis"` | 83 |
+| Diagnostic Impression | `"Diagnostic Impression"` | 38 |
+| Practice Exams | `"Practice Exam 1"` | 301 |
+
+The preprocessing script receives these exact strings as the `category` value in its prompt. No normalization step needed.
+
+---
+
+## Grading & Resurfacing (QFC-specific behavior)
+
+The existing FC mode uses two buttons ("✓ Right" / "✗ Wrong") and linear progression — `fcAdvance()` simply increments `fcIndex`; there is no resurfacing. This is unchanged.
+
+**QFC adds a resurface loop** inside `fcScore()` when `activeMode === 'qfc'`:
+
+```
+fcScore('right')  → increment qfcRight counter, then fcAdvance() as normal
+fcScore('wrong')  → increment qfcWrong counter, push a copy of fcDeck[fcIndex]
+                    to end of fcDeck, THEN call fcAdvance()
+                    (push must happen before fcAdvance to avoid premature end-of-deck)
+```
+
+**Score tracking:** QFC uses two running counters (`qfcRight`, `qfcWrong`) instead of the `fcScores` per-index array. This avoids out-of-bounds writes as `fcDeck` grows with resurfaced cards. `endSession()` receives `{ right: qfcRight, wrong: qfcWrong }` for QFC sessions; the badge and ring still work with right/wrong counts.
+
+**Denominator display:** `fc-face-num` shows `${fcIndex + 1} / ${qfcOriginalLength}` — the denominator is frozen at the original deck length stored in `qfcOriginalLength` at session start. Resurfaced cards don't inflate the counter. (The progress bar `fc-prog-fill` continues to use `fcDeck.length` for an honest progress indicator.)
+
+**Back button during resurfacing:** `fcBack()` is disabled once `fcIndex >= qfcOriginalLength` (i.e., once the user enters the resurface zone). This prevents double-scoring a slot and confusing stats. The Back button's `disabled` state is set in `fcRenderCard()` using the same check already there (`fcHistory.length <= 1`), extended to also disable when `activeMode === 'qfc' && fcIndex >= qfcOriginalLength`.
+
+The "Got it / Almost / Missed it" language discussed during brainstorming maps onto the existing two-button UI as follows: the existing "✓ Right" = "Got it" and "✗ Wrong" = "Missed it / Almost". No new buttons are added.
+
+### Play Again
+`playAgain()` currently: `if (activeMode === 'fc') startFC(); else startMC();`
+
+Add QFC branch: `else if (activeMode === 'qfc') showScreen('screen-qfc-select');`
+
+"Play Again" after a QFC session returns the user to the category selector, not the same deck.
+
+### Summary Screen Badge
+`endSession()` badge currently has `fc` case and falls through to "Multiple Choice" for all else.
+
+Add QFC case:
+```javascript
+if (activeMode === 'qfc') {
+  badge.innerHTML = `<svg ...document-icon...></svg> Exam Flashcards`;
+}
+```
 
 ---
 
@@ -96,26 +153,29 @@ const EXAM_CARDS = [
 ### Purpose
 One-time Python script that converts QUESTION_BANK entries to concept cards via Claude API.
 
-### Script: `scripts/generate_flashcards.py`
+### Input Preparation
+Export the QUESTION_BANK JS array from `index.html` to a standalone `scripts/question_bank.json` file before running. This avoids complex HTML parsing.
 
-**Input:** All 924 entries from QUESTION_BANK (extracted from `index.html` or a separate JSON export)
+### Script: `scripts/generate_exam_flashcards.py`
 
 **Per-entry prompt to Claude:**
 ```
-Given this exam question, its correct answer, and its rationale, derive a concept flashcard.
+Given this exam question, its correct answer text, and its rationale, derive a concept flashcard.
 
 Question: {q}
-Correct answer: {answerText}
+Correct answer text: {answerText_or_fallback}
 Rationale: {rationale}
 Category: {category}
 
-Return JSON:
+Return JSON only:
 {
-  "concept_title": "Short noun phrase naming the clinical concept being tested (e.g. 'Signs of Child Abuse', 'Suicide Risk Factors', 'Mandated Reporting — IPV'). Max 6 words.",
-  "concept_explanation": "1–3 sentence takeaway a student should memorize. Teach the rule or principle, not the answer letter.",
-  "keep": true/false  // false if the question tests trivia, procedure recall, or doesn't yield a reusable concept
+  "concept_title": "Short noun phrase (max 6 words) naming the clinical concept tested. Examples: 'Signs of Child Abuse', 'Suicide Risk Factors', 'Mandated Reporting — IPV'.",
+  "concept_explanation": "1–3 sentences. State the clinical rule or principle a student should memorize. Teach the concept, not the answer letter.",
+  "keep": true or false  // false if the question tests procedural recall, specific statistics, or doesn't yield a reusable standalone principle
 }
 ```
+
+**answerText fallback:** If `answerText` is empty or missing (298/924 entries), substitute `"(answer text not available)"` in the prompt. Claude will use the rationale alone to derive the concept. If the rationale is also too thin to yield a concept, the script should set `keep: false`.
 
 **Output:** `scripts/flashcards_review.json`
 ```json
@@ -133,40 +193,33 @@ Return JSON:
 
 ### Review Workflow
 1. Script runs → produces `scripts/flashcards_review.json`
-2. User reviews the file — edits titles, flips `keep: false` for unwanted cards
+2. User reviews the file — edits `concept_title`/`concept_explanation`, flips `keep` to `false` to drop cards
 3. User approves
-4. Approved cards are embedded as `EXAM_CARDS` array in `index.html`
+4. Approved (`keep: true`) cards embedded as `EXAM_CARDS` array in `index.html`
+5. `scripts/flashcards_review.json` and `scripts/question_bank.json` kept in repo for traceability but not served
 
 ---
 
 ## UI — Category Selector Screen (`#screen-qfc-select`)
 
 - Back button → `goHome()`
+- Nav mode label: `"Exam Flashcards"`
 - Page title: "Exam Flashcards"
-- Page subtitle: "Choose a domain to drill or mix all questions"
-- 7 tiles in a grid layout (matches `.mode-grid` style):
-  - 6 domain tiles — name + card count (e.g., "Clinical Evaluation · 142 cards")
-  - 1 "Mix All" full-width tile — total card count
+- Page subtitle: "Choose a domain to drill, or mix all"
+- 8 tiles using `.mode-grid`:
+  - 6 domain tiles (standard 2-column grid) — name + live card count (e.g., `"Clinical Evaluation · 142 cards"`)
+  - 1 "Practice Exams" tile (standard grid)
+  - 1 "Mix All" full-width tile (`grid-column: 1 / -1`, row layout) — shows total card count
+- Card counts computed at render time: `EXAM_CARDS.filter(c => c.category === cat).length`
 - Tapping any tile calls `startQFC(category)` or `startQFC('all')`
-
----
-
-## Grading & Resurfacing
-
-Identical to existing FC mode:
-- Three grade buttons: Got it / Almost / Missed it
-- "Got it" → card removed from deck
-- "Almost" / "Missed it" → card appended to end of deck
-- Session ends when all cards graded "Got it"
-- Summary screen shows score (same as existing FC summary)
 
 ---
 
 ## What Is NOT Changing
 
-- `#screen-quiz` HTML structure
-- `flipCard()`, `gradeFC()`, deck-resurfacing logic
-- Existing theory-term Flash Cards mode
+- `#screen-quiz` HTML structure (no new elements added)
+- `flipCard()`, `fcBack()`, `fcNext()`, `fcRenderStats()`, `fcAdvance()`
+- Existing theory-term Flash Cards mode behavior
 - Multiple Choice mode
 - Question Lookup mode
 - Key Terms by Diagnosis section
@@ -177,16 +230,18 @@ Identical to existing FC mode:
 
 | File | Change |
 |------|--------|
-| `index.html` | Add home tile, `#screen-qfc-select` HTML, CSS for selector screen, `EXAM_CARDS` array, `startQFC()` function, renderer branch in existing FC functions |
-| `scripts/generate_flashcards.py` | New — one-time preprocessing script |
-| `scripts/flashcards_review.json` | New — review artifact (not committed to repo after embed) |
+| `index.html` | Add home tile; add `#screen-qfc-select` HTML + CSS; add `EXAM_CARDS` array; add `startQFC()` function; branch in `fcRenderCard()` for concept card binding + face/nav label updates; branch in `fcScore()` for QFC resurface loop; add QFC case in `playAgain()` and `endSession()` |
+| `scripts/generate_exam_flashcards.py` | New — one-time preprocessing script |
+| `scripts/question_bank.json` | New — QUESTION_BANK exported for script input |
+| `scripts/flashcards_review.json` | New — review artifact (kept for traceability after embed) |
 
 ---
 
 ## Success Criteria
 
-- User can tap "Exam Flashcards" from home and pick a domain within 2 taps
-- Cards flip, grade, and resurface identically to existing FC mode
-- Each card teaches a principle, not a trivia answer
-- Domain tiles show accurate card counts
-- ~500+ cards available across all 6 domains
+- User can reach a flashcard session within 2 taps from home
+- Side A shows a clean concept title; Side B shows a clinical principle
+- Wrong answers resurface until the user gets them right
+- All 8 domain/mix tiles show accurate card counts
+- Existing Flash Cards and Multiple Choice modes are unaffected
+- ~500+ cards available across all domains after review curation
