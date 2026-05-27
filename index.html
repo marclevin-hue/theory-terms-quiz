@@ -2088,10 +2088,24 @@ function fcBack() {
 
 function fcRenderCard() {
   const card = fcDeck[fcIndex];
-  document.getElementById('fc-term').textContent   = card.term;
-  document.getElementById('fc-theory').textContent = card.theory;
-  document.getElementById('fc-prog-num').textContent  = fcIndex + 1;
-  document.getElementById('fc-face-num').textContent  = `${fcIndex + 1} / ${fcDeck.length}`;
+
+  if (activeMode === 'qfc') {
+    document.getElementById('fc-term').textContent   = card.concept_title;
+    document.getElementById('fc-theory').textContent = card.concept_explanation;
+    document.getElementById('fc-prog-num').textContent  = fcIndex + 1;
+    document.getElementById('fc-face-num').textContent  = `${fcIndex + 1} / ${qfcOriginalLength}`;
+    document.querySelector('#screen-quiz .card-front .face-label').textContent = 'Concept';
+    document.querySelector('#screen-quiz .card-back  .face-label').textContent = 'Key Learning';
+    document.querySelector('#screen-quiz .quiz-nav-mode').textContent          = 'Exam Flashcards';
+  } else {
+    document.getElementById('fc-term').textContent   = card.term;
+    document.getElementById('fc-theory').textContent = card.theory;
+    document.getElementById('fc-prog-num').textContent  = fcIndex + 1;
+    document.getElementById('fc-face-num').textContent  = `${fcIndex + 1} / ${fcDeck.length}`;
+    document.querySelector('#screen-quiz .card-front .face-label').textContent = 'Term';
+    document.querySelector('#screen-quiz .card-back  .face-label').textContent = 'Theory';
+    document.querySelector('#screen-quiz .quiz-nav-mode').textContent          = 'Flash Cards';
+  }
 
   const el = document.getElementById('fc-card');
   if (fcFlipped) {
@@ -2103,7 +2117,9 @@ function fcRenderCard() {
     document.getElementById('fc-btn-correct').classList.add('hidden');
     document.getElementById('fc-btn-wrong').classList.add('hidden');
   }
-  document.getElementById('fc-btn-back').disabled = fcHistory.length <= 1;
+  // Back disabled at start OR once we're in the resurface zone (QFC only)
+  document.getElementById('fc-btn-back').disabled =
+    fcHistory.length <= 1 || (activeMode === 'qfc' && fcIndex >= qfcOriginalLength);
   document.getElementById('fc-prog-fill').style.width = (fcIndex / fcDeck.length * 100) + '%';
 }
 
