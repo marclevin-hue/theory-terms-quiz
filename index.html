@@ -2059,17 +2059,36 @@ function fcFlip() {
 }
 
 function fcScore(result) {
-  fcScores[fcIndex] = result;
-  fcAdvance();
+  if (activeMode === 'qfc') {
+    if (result === 'right') {
+      qfcRight++;
+    } else {
+      qfcWrong++;
+      // Push BEFORE calling fcAdvance — otherwise deck length hasn't grown yet
+      // and fcAdvance() would fire end-of-session prematurely.
+      // Spread into a new object: EXAM_CARDS entries are flat so this is safe.
+      fcDeck.push({ ...fcDeck[fcIndex] });
+    }
+    fcAdvance();
+  } else {
+    fcScores[fcIndex] = result;
+    fcAdvance();
+  }
 }
 
 function fcNext() {
-  if (fcScores[fcIndex] === null) fcScores[fcIndex] = 'skip';
+  if (activeMode !== 'qfc') {
+    // QFC has no skip — Next button advances without recording
+    if (fcScores[fcIndex] === null) fcScores[fcIndex] = 'skip';
+  }
   fcAdvance();
 }
 
 function fcAdvance() {
-  if (fcIndex >= fcDeck.length - 1) { endSession(fcScores); return; }
+  if (fcIndex >= fcDeck.length - 1) {
+    endSession(activeMode === 'qfc' ? { right: qfcRight, wrong: qfcWrong } : fcScores);
+    return;
+  }
   fcIndex++;
   fcHistory.push(fcIndex);
   fcFlipped = false;
@@ -2124,9 +2143,15 @@ function fcRenderCard() {
 }
 
 function fcRenderStats() {
-  document.getElementById('fc-cnt-right').textContent = fcScores.filter(s => s === 'right').length;
-  document.getElementById('fc-cnt-wrong').textContent = fcScores.filter(s => s === 'wrong').length;
-  document.getElementById('fc-cnt-skip').textContent  = fcScores.filter(s => s === 'skip').length;
+  if (activeMode === 'qfc') {
+    document.getElementById('fc-cnt-right').textContent = qfcRight;
+    document.getElementById('fc-cnt-wrong').textContent = qfcWrong;
+    document.getElementById('fc-cnt-skip').textContent  = 0;
+  } else {
+    document.getElementById('fc-cnt-right').textContent = fcScores.filter(s => s === 'right').length;
+    document.getElementById('fc-cnt-wrong').textContent = fcScores.filter(s => s === 'wrong').length;
+    document.getElementById('fc-cnt-skip').textContent  = fcScores.filter(s => s === 'skip').length;
+  }
 }
 
 // ═══════════════════════════════════════
@@ -2226,9 +2251,19 @@ function mcRenderStats() {
 // END SESSION (shared)
 // ═══════════════════════════════════════
 async function endSession(scores) {
-  const right    = scores.filter(s => s === 'right').length;
-  const wrong    = scores.filter(s => s === 'wrong').length;
-  const skip     = scores.filter(s => s === 'skip' || s === null).length;
+  // NOTE: activeMode is still 'qfc'/'fc'/'mc' here — it is only reset by the
+  // next startFC/startMC/startQFC call. This branch relies on that assumption.
+  let right, wrong, skip;
+  if (activeMode === 'qfc') {
+    // scores is { right: qfcRight, wrong: qfcWrong } for QFC sessions
+    right = scores.right;
+    wrong = scores.wrong;
+    skip  = 0;
+  } else {
+    right = scores.filter(s => s === 'right').length;
+    wrong = scores.filter(s => s === 'wrong').length;
+    skip  = scores.filter(s => s === 'skip' || s === null).length;
+  }
   const answered = right + wrong;
   const pct      = answered > 0 ? Math.round((right / answered) * 100) : 0;
 
@@ -2241,6 +2276,8 @@ async function endSession(scores) {
   const badge = document.getElementById('complete-mode-badge');
   if (activeMode === 'fc') {
     badge.innerHTML = `<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="16" height="12" rx="2"/><line x1="1" y1="7" x2="17" y2="7"/></svg> Flash Cards`;
+  } else if (activeMode === 'qfc') {
+    badge.innerHTML = `<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="2" width="16" height="14" rx="2"/><line x1="5" y1="7" x2="13" y2="7"/><line x1="5" y1="11" x2="10" y2="11"/></svg> Exam Flashcards`;
   } else {
     badge.innerHTML = `<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="4.5" cy="5" r="1.2" fill="currentColor" stroke="none"/><line x1="7.5" y1="5" x2="17" y2="5"/><circle cx="4.5" cy="9" r="1.2" fill="currentColor" stroke="none"/><line x1="7.5" y1="9" x2="17" y2="9"/><circle cx="4.5" cy="13" r="1.2" fill="currentColor" stroke="none"/><line x1="7.5" y1="13" x2="17" y2="13"/></svg> Multiple Choice`;
   }
@@ -2275,7 +2312,8 @@ function goHome() {
 }
 
 function playAgain() {
-  if (activeMode === 'fc') startFC();
+  if (activeMode === 'fc')  startFC();
+  else if (activeMode === 'qfc') showQFCSelect(); // re-renders domain counts
   else startMC();
 }
 
