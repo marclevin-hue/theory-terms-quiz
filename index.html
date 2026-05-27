@@ -2017,6 +2017,11 @@ function showScreen(id) {
 // ── SHARED STATE ──────────────────────────────────────────────────────────────
 let activeMode = null; // 'fc' | 'mc'
 
+// ── QFC STATE ─────────────────────────────────────────────────────────────────
+let qfcRight          = 0;
+let qfcWrong          = 0;
+let qfcOriginalLength = 0;
+
 // ═══════════════════════════════════════
 // FLASH CARD MODE
 // ═══════════════════════════════════════
@@ -2269,6 +2274,20 @@ async function loadHomeCount() {
 }
 
 loadHomeCount();
+
+// ── EXAM CARDS (stub — replaced in Task 10 with full preprocessed deck) ───────
+const EXAM_CARDS = [
+  { id:1, category:"Clinical Evaluation",    concept_title:"Signs of Child Abuse",          concept_explanation:"When a child presents with fearfulness, clinginess, or withdrawal, prioritize assessing for abuse before pursuing a diagnosis or referral.", source_q:"" },
+  { id:2, category:"Clinical Evaluation",    concept_title:"Suicide Risk: Active Plan",     concept_explanation:"A client with an active suicide plan requires immediate action — initiate a 5150 (involuntary hold). Safety contracts alone are insufficient when a lethal plan exists.", source_q:"" },
+  { id:3, category:"Treatment",              concept_title:"DBT for BPD",                   concept_explanation:"Dialectical Behavior Therapy (DBT), developed by Marsha Linehan, is the evidence-based treatment for Borderline Personality Disorder. It targets mindfulness, interpersonal effectiveness, distress tolerance, and emotion regulation.", source_q:"" },
+  { id:4, category:"Treatment",              concept_title:"ERP for OCD",                   concept_explanation:"Exposure and Response Prevention (ERP) is the gold-standard treatment for OCD. It is combined with SSRIs for moderate-to-severe presentations. Psychoeducation for client and family reduces accommodation behaviors.", source_q:"" },
+  { id:5, category:"Law & Ethics",           concept_title:"Mandated Reporting — IPV",      concept_explanation:"When children are present during intimate partner violence, the therapist has reasonable suspicion of harm and must file a child abuse report — even if the children were not directly assaulted.", source_q:"" },
+  { id:6, category:"Law & Ethics",           concept_title:"Minor Consent — Buprenorphine", concept_explanation:"Per AB 816 (effective Jan 1, 2024), minors 16 and older may independently consent to buprenorphine-based medication-assisted treatment for opioid use disorder outside a licensed narcotic treatment program.", source_q:"" },
+  { id:7, category:"Case Conceptualization", concept_title:"Bowen: Family Role in Problems", concept_explanation:"In Murray Bowen's extended family systems therapy, each member is encouraged to identify their own role in the presenting problem rather than blaming others.", source_q:"" },
+  { id:8, category:"Managing Crisis",        concept_title:"Rape: Medical Before Legal",    concept_explanation:"Following a sexual assault, the first clinical priority is ensuring the client receives a medical examination — before addressing emotional processing or legal decisions.", source_q:"" },
+  { id:9, category:"Diagnostic Impression",  concept_title:"Adjustment Disorder Criteria",  concept_explanation:"Adjustment Disorder requires an identifiable psychosocial stressor with symptoms beginning within 3 months of onset. Symptoms must be clinically significant but not meet criteria for another disorder.", source_q:"" },
+  { id:10,category:"Practice Exam 1",        concept_title:"Hopelessness as Suicide Predictor", concept_explanation:"Hopelessness is the single strongest predictor of suicide risk — more so than depression severity alone. Flag it immediately and assess for plan, means, and intent.", source_q:"" },
+];
 
 // ═══════════════════════════════════════
 // QUESTION LOOKUP MODULE
@@ -3443,6 +3462,64 @@ function resetLookup() {
 
 function showDiagnosisTerms() {
   showScreen('screen-diagnosis-terms');
+}
+
+function showQFCSelect() {
+  renderQFCSelect();
+  showScreen('screen-qfc-select');
+}
+
+function renderQFCSelect() {
+  const DOMAINS = [
+    { label: 'Clinical Evaluation',    cat: 'Clinical Evaluation' },
+    { label: 'Treatment',              cat: 'Treatment' },
+    { label: 'Law & Ethics',           cat: 'Law & Ethics' },
+    { label: 'Case Conceptualization', cat: 'Case Conceptualization' },
+    { label: 'Managing Crisis',        cat: 'Managing Crisis' },
+    { label: 'Diagnostic Impression',  cat: 'Diagnostic Impression' },
+    { label: 'Practice Exams',         cat: 'Practice Exam 1' },
+  ];
+  const grid  = document.getElementById('qfc-domain-grid');
+  const total = EXAM_CARDS.length;
+
+  let html = DOMAINS.map(d => {
+    const count = EXAM_CARDS.filter(c => c.category === d.cat).length;
+    return `<div class="mode-tile" onclick="startQFC('${d.cat}')">
+      <div class="mode-name">${d.label}</div>
+      <div class="mode-desc">${count} card${count !== 1 ? 's' : ''}</div>
+    </div>`;
+  }).join('');
+
+  html += `<div class="mode-tile" onclick="startQFC('all')" style="grid-column: 1 / -1; display:flex; flex-direction:row; align-items:center; gap:18px; padding:22px 26px;">
+    <div>
+      <div class="mode-name">Mix All</div>
+      <div class="mode-desc">All ${total} cards shuffled together</div>
+    </div>
+  </div>`;
+
+  grid.innerHTML = html;
+}
+
+function startQFC(category) {
+  const pool = category === 'all'
+    ? EXAM_CARDS
+    : EXAM_CARDS.filter(c => c.category === category);
+
+  activeMode        = 'qfc';
+  // IMPORTANT: spread into a new array so shuffle() doesn't mutate EXAM_CARDS
+  fcDeck            = shuffle([...pool]);
+  fcIndex           = 0;
+  fcFlipped         = false;
+  fcScores          = [];
+  fcHistory         = [0];
+  qfcRight          = 0;
+  qfcWrong          = 0;
+  qfcOriginalLength = fcDeck.length;
+
+  document.getElementById('fc-prog-total').textContent = fcDeck.length;
+  showScreen('screen-quiz');
+  fcRenderCard();
+  fcRenderStats();
 }
 </script>
 </body>
