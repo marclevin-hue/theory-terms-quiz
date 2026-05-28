@@ -2015,7 +2015,7 @@ function showScreen(id) {
 }
 
 // ── SHARED STATE ──────────────────────────────────────────────────────────────
-let activeMode = null; // 'fc' | 'mc'
+let activeMode = null; // 'fc' | 'mc' | 'qfc'
 
 // ── QFC STATE ─────────────────────────────────────────────────────────────────
 let qfcRight          = 0;
@@ -2077,8 +2077,8 @@ function fcScore(result) {
 }
 
 function fcNext() {
+  // QFC has no skip — Next advances without recording
   if (activeMode !== 'qfc') {
-    // QFC has no skip — Next button advances without recording
     if (fcScores[fcIndex] === null) fcScores[fcIndex] = 'skip';
   }
   fcAdvance();
