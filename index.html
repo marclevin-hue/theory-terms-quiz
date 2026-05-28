@@ -379,6 +379,15 @@
       max-width: 88%;
     }
 
+    /* QFC cards have 2-3 sentence explanations — scale down from the default large theory size */
+    body.mode-qfc .theory-text {
+      font-size: clamp(0.85rem, 2.4vw, 1.1rem);
+      line-height: 1.55;
+      font-weight: 400;
+      text-align: left;
+      max-width: 92%;
+    }
+
     .flip-hint {
       position: absolute;
       bottom: 16px;
@@ -2033,6 +2042,7 @@ let fcHistory = [];
 
 function startFC() {
   activeMode = 'fc';
+  document.body.classList.remove('mode-qfc');
   fcDeck    = shuffle(TERMS);
   fcIndex   = 0;
   fcFlipped = false;
@@ -2172,6 +2182,7 @@ function generateMCDeck() {
 
 function startMC() {
   activeMode = 'mc';
+  document.body.classList.remove('mode-qfc');
   mcDeck    = generateMCDeck();
   mcIndex   = 0;
   mcScores  = new Array(mcDeck.length).fill(null);
@@ -4479,6 +4490,7 @@ function startQFC(category) {
   }
 
   activeMode        = 'qfc';
+  document.body.classList.add('mode-qfc');
   // IMPORTANT: spread into a new array so shuffle() doesn't mutate EXAM_CARDS
   fcDeck            = shuffle([...pool]);
   fcIndex           = 0;
