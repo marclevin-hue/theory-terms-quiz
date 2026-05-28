@@ -3538,7 +3538,8 @@ function renderQFCSelect() {
 
   let html = DOMAINS.map(d => {
     const count = EXAM_CARDS.filter(c => c.category === d.cat).length;
-    return `<div class="mode-tile" onclick="startQFC('${d.cat}')">
+    const safeCat = d.cat.replace(/&/g, '&amp;');
+    return `<div class="mode-tile" onclick="startQFC('${safeCat}')">
       <div class="mode-name">${d.label}</div>
       <div class="mode-desc">${count} card${count !== 1 ? 's' : ''}</div>
     </div>`;
@@ -3558,6 +3559,11 @@ function startQFC(category) {
   const pool = category === 'all'
     ? EXAM_CARDS
     : EXAM_CARDS.filter(c => c.category === category);
+
+  if (pool.length === 0) {
+    alert('No cards available for this domain.');
+    return;
+  }
 
   activeMode        = 'qfc';
   // IMPORTANT: spread into a new array so shuffle() doesn't mutate EXAM_CARDS
